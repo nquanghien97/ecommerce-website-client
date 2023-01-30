@@ -81,11 +81,6 @@ function Navbar(props) {
     setIsComponentVisible(false)
   },[setIsComponentVisible])
 
-  const goToProducts = () => {
-    navigate('/allproducts')
-    setExtendNavbar(false)
-  }
-
   return (
     <NavbarContainer>
       <NavbarInnerContainer>
@@ -169,7 +164,15 @@ function Navbar(props) {
           </Top>
           <Bottom>
             {menuItems.map((item, index) => (
-              <NavbarLinkExtended onClick={goToProducts} key={index}>{item.name}</NavbarLinkExtended>
+              <NavbarLinkExtended
+                onClick={() => {
+                  navigate(`/${item.path}`)
+                  setExtendNavbar(false)
+                }}
+                key={index}
+              >
+                {item.title}
+              </NavbarLinkExtended>
             ))}
           </Bottom>
         </NavbarExtendedContainer>
