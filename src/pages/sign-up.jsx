@@ -1,17 +1,53 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { mobile } from '../responsive';
-import { auth, handleUserProfile } from '../firebase/utils'
+import { register } from '../redux/User/user.actions';
+import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
 
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate()
+
   const [input, setInput] = useState({
-    displayName: '',
-    email: '',
+    fullName: '',
+    username: '',
     password: '',
     confirmPassword: '',
-    errors: [],
+    errors: '',
   })
+  
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const { fullName, username, password, confirmPassword } = input
+
+
+    if(password !== confirmPassword) {
+      const err = 'Mật khẩu không khớp';
+      setInput({
+        ...input,
+        errors: err
+      })
+      return;
+    }
+      try {
+        dispatch(register(username, password, fullName)) ;
+
+        setInput({
+          fullName: '',
+          username: '',
+          password: '',
+          confirmPassword: '',
+          errors: [],
+        })
+        navigate("/sign-in")
+      }
+      catch(error) {
+        console.log(error)
+    }
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,56 +56,28 @@ function SignUp() {
       [name]: value
     })
   }
-  
-  const handleSubmit = async e => {
-    e.preventDefault();
-    const { displayName, email, password, confirmPassword } = input
-    if(password !== confirmPassword) {
-      const err = ['Mật khẩu không khớp']
-      setInput({
-        errors: err
-      })
-      return;
-    }
-      try {
-        const { user } = await auth.createUserWithEmailAndPassword(email, password);
-  
-        await handleUserProfile( user, { displayName })
-  
-        setInput({
-          displayName: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-          errors: [],
-        })
-      }
-      catch(error) {
-        console.log(error)
-    }
-  }
+
+  console.log(input)
 
   return (
     <Container>
       <Content>
       <Title>Đăng ký</Title>
       { input.errors.length > 0 && (
-        input.errors.map((error) => {
-          return <p style={{color: 'red'}}>{error}</p>
-        })
+          <p style={{color: 'red'}}>{input.errors}</p>
       )}
       <Form onSubmit={handleSubmit}>
         <Wrapper>
           <Input
-            name="displayName"
+            name="fullName"
             placeholder="Họ tên"
-            value={input.displayName}
+            value={input.fullName}
             onChange={handleChange}
           />
           <Input
-            name="email"
-            placeholder="Email"
-            value={input.email}
+            name="username"
+            placeholder="Username"
+            value={input.username}
             onChange={handleChange}
           />
           <Input

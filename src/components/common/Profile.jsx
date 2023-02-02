@@ -1,13 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { actFetchProductsRequest, actFetchClothesRequest } from '../../redux/Products/actions';
-import { auth } from '../../firebase/utils';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../redux/User/user.actions';
 
-function Profile(props) {
+function Profile() {
 
-  const userStatus = props.currentUser
+  const dispatch = useDispatch();
+
+  const userStatus = useSelector(state => state.user.user)
+
+  const logOut = () => dispatch(logout())
 
   return (
     <Container>
@@ -15,10 +18,10 @@ function Profile(props) {
       (
         <WrapperMobile>
           <Text>
-            {`Xin chào ${userStatus?.displayName}`}
+            {`Xin chào ${userStatus?.fullName}`}
           </Text>
           <Link to='/sign-in'>
-            <MenuItems onClick={() => auth.signOut()}>
+            <MenuItems onClick={() => logOut()}>
               Đăng xuất
             </MenuItems>
           </Link>
@@ -72,17 +75,4 @@ const NotSignIn = styled.div`
 
 `
 
-const mapStateToProps = state => ({
-  currentUser: state.user.currentUser,
-  _products: state._todoProduct,
-  _clothes: state._todoProduct
-});
-
-function mapDispatchToProps(dispatch){
-    return{
-        actFetchProductsRequest:()=>dispatch(actFetchProductsRequest()),
-        actFetchClothesRequest:()=>dispatch(actFetchClothesRequest()),
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+export default Profile;

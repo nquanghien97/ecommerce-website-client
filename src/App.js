@@ -1,10 +1,8 @@
 import { useEffect } from 'react'
-import { connect } from 'react-redux'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import './App.css';
-import { setCurrentUser } from './redux/User/user.actions'
-import { auth, handleUserProfile } from './firebase/utils'
 import Home from './pages/Home'
 import Header from './pages/Header'
 import Cart from './pages/Cart'
@@ -15,26 +13,9 @@ import WishList from './pages/wishList';
 import AllProducts from './pages/AllProducts';
 import FilterProducts from './pages/FilterProducts';
 
-function App(props) {
+function App() {
 
-  const { currentUser, setCurrentUser } = props
-  useEffect(() =>{
-    const authListener = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        const userRef = await handleUserProfile(userAuth)
-        userRef.onSnapshot(snapshot => {
-          setCurrentUser({
-            id: snapshot.id,
-            ...snapshot.data()
-          })
-        })
-      }
-      setCurrentUser(userAuth)
-    })
-    return() => {
-      authListener()
-    } 
-  },[setCurrentUser])
+  const currentUser = useSelector((state) => state.user.user)
 
   return (
     <BrowserRouter>
@@ -54,12 +35,5 @@ function App(props) {
   )
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser,
-});
 
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

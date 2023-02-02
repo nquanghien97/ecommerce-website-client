@@ -1,25 +1,27 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
-import { Link } from 'react-router-dom'
-import { mobile } from '../responsive'
-import { signInWithGoogle, auth } from '../firebase/utils';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { mobile } from '../responsive';
+import { login } from '../redux/User/user.actions';
 
 function SignIn() {
 
+  const dispatch = useDispatch();
+
   const [input, setInput] = useState({
-    email: '',
+    username: '',
     password: '',
   })
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, password } = input
+    const { username, password } = input
 
     try {
-      await auth.signInWithEmailAndPassword(email, password)
-
+      dispatch(login(username, password));
       setInput({
-        email: '',
+        username: '',
         password: '',
       })
     }
@@ -44,10 +46,10 @@ function SignIn() {
       <Form onSubmit={handleSubmit}>
         <Wrapper>
           <Input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={input.email}
+            type="username"
+            name="username"
+            placeholder="Username"
+            value={input.username}
             onChange={handleChange}
           />
           <Input
@@ -59,12 +61,9 @@ function SignIn() {
           />
         </Wrapper>
         <ButtonWrapper>
-          <Button>Đăng nhập</Button>
+          <Button type="submit">Đăng nhập</Button>
         </ButtonWrapper>
       </Form>
-      <Google onClick={signInWithGoogle}>
-          Sign-in with Google
-      </Google>
       <SignUpWrapper>
           Bạn chưa có tài khoản?
           <Link to='/sign-up'>
@@ -140,19 +139,6 @@ const Button = styled.button`
   background-color: #2acd83;
   &:hover {
     background-color: #8dd3b3;
-  }
-`
-
-const Google = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  width: 50%;
-  background-color: #d85040;
-  &:hover {
-    background-color: #d38a81;
   }
 `
 
