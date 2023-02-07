@@ -1,39 +1,20 @@
-import { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-
+import { Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
-import Home from './pages/Home'
-import Header from './pages/Header'
-import Cart from './pages/Cart'
-import Product from './pages/Product'
-import SignIn from './pages/sign-in';
-import SignUp from './pages/sign-up';
-import WishList from './pages/wishList';
-import AllProducts from './pages/AllProducts';
-import FilterProducts from './pages/FilterProducts';
+import DashBoard from './router/dashboard';
+import Client from './router/client';
+import { useSelector } from 'react-redux';
 
 function App() {
 
-  const currentUser = useSelector((state) => state.user.user)
+  const roles =  useSelector((state) => state.user?.user?.role)
 
   return (
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/cart' element={<Cart />} />
-        <Route path='/product/:id' element={<Product />} />
-        <Route path='/sign-in' element={ currentUser ? <Navigate to="/" replace /> : <SignIn />} />
-        <Route path='/sign-up' element={ currentUser ? <Navigate to="/" replace /> : <SignUp />} />
-        <Route path='/wishlist' element={<WishList />} />
-        <Route path='/allproducts' element={<AllProducts />} />
-        <Route path='/female' element={<FilterProducts />} />
-        <Route path='/male' element={<FilterProducts />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path='/*' element={roles === "admin" ? <Navigate to="/dashboard/" replace />: <Client />} />
+      <Route path='/dashboard/*' element={roles === "admin" ? <DashBoard /> : <Client />} />
+    </Routes>
+    // element={ currentUser ? <Navigate to="/" replace /> : <SignIn />} />
   )
 }
-
 
 export default App;

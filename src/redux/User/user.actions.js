@@ -17,20 +17,20 @@ export const register = (username, password, fullName) => (dispatch) => {
       });
       return Promise.resolve();
     },
-    (err) => {
-      const message = err.response?.data?.message;
+      (err) => {
+        const message = err.response?.data?.message;
 
-      dispatch({
-        type: REGISTER_FAIL,
-      });
+        dispatch({
+          type: REGISTER_FAIL,
+        });
 
-      dispatch({
-        type: SET_MESSAGE,
-        payload: message,
-      });
-      return Promise.reject();
-    }
-    )
+        dispatch({
+          type: SET_MESSAGE,
+          payload: message,
+        });
+        return Promise.reject();
+      }
+      )
 }
 
 export const login = (username, password) => {

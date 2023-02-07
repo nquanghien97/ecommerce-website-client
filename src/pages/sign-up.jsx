@@ -3,13 +3,11 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { mobile } from '../responsive';
 import { register } from '../redux/User/user.actions';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function SignUp() {
 
   const dispatch = useDispatch();
-
-  const navigate = useNavigate()
 
   const [input, setInput] = useState({
     fullName: '',
@@ -33,7 +31,8 @@ function SignUp() {
       return;
     }
       try {
-        dispatch(register(username, password, fullName)) ;
+        // if(!username || !password || !fullName) return;
+        dispatch(register(username, password, fullName));
 
         setInput({
           fullName: '',
@@ -42,7 +41,7 @@ function SignUp() {
           confirmPassword: '',
           errors: [],
         })
-        navigate("/sign-in")
+        // navigate("/sign-in")
       }
       catch(error) {
         console.log(error)
@@ -56,8 +55,6 @@ function SignUp() {
       [name]: value
     })
   }
-
-  console.log(input)
 
   return (
     <Container>
@@ -98,6 +95,14 @@ function SignUp() {
         <ButtonWrapper>
           <Button>Đăng ký</Button>
         </ButtonWrapper>
+        <SignInWrapper>
+          Bạn đã có tài khoản?
+          <Link to='/sign-in'>
+            <SignIn>
+              Đăng nhập
+            </SignIn>
+          </Link>
+      </SignInWrapper>
       </Form>
       </Content>
     </Container>
@@ -168,6 +173,22 @@ const Button = styled.button`
   background-color: #2acd83;
   &:hover {
     background-color: #8dd3b3;
+  }
+`
+
+const SignInWrapper = styled.div`
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const SignIn = styled.span`
+  margin-left: 8px;
+  color: blue;
+  cursor: pointer;
+  &:hover {
+      text-decoration: underline;
   }
 `
 

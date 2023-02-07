@@ -14,104 +14,106 @@ export const ADD_WISH_LIST = 'ADD_WISH_LIST';
 export const GET_NUMBER_WISH_LIST= 'GET_NUMBER_WISH_LIST';
 
 export const actFetchProductsRequest = () => {
-    return (dispatch) => {
-        return getAllProducts().then(res => {
-            dispatch(GetAllProduct(res.data));
-        });
-    }
+  return (dispatch) => {
+    return getAllProducts().then(res => {
+      dispatch(GetAllProduct(res.data));
+    });
+  }
 }
 
 export const actFetchShoesRequest = () => {
-    return (dispatch) => {
-        return getShoes().then(res => {
-            dispatch(GetAllShoes(res.data));
-        });
-    }
+  return (dispatch) => {
+    return getShoes()
+      .then(res => {
+        dispatch(GetAllShoes(res.data));
+    });
+  }
 }
 
 export const actFetchClothesRequest = () => {
-    return (dispatch) => {
-        return getClothes().then(res => {
-            dispatch(GetAllClothes(res.data));
-        });
-    }
+  return (dispatch) => {
+    return getClothes()
+      .then(res => {
+        dispatch(GetAllClothes(res.data));
+      });
+  }
 }
 
 /*GET_ALL_PRODUCT*/
 export function GetAllProduct(payload){
-    return{
-        type:'GET_ALL_PRODUCT',
-        payload
-    }
+  return{
+    type:'GET_ALL_PRODUCT',
+    payload
+  }
 }
 
 //*GET_SHOES
 export function GetAllShoes(payload){
-    return{
-        type:'GET_ALL_SHOES',
-        payload
-    }
+  return{
+    type:'GET_ALL_SHOES',
+    payload
+  }
 }
 
 //*GET_CLOTHES
 export function GetAllClothes(payload){
-    return{
-        type:'GET_ALL_CLOTHES',
-        payload
-    }
+  return{
+    type:'GET_ALL_CLOTHES',
+    payload
+  }
 }
 
 //*ADD_WISH_LIST
 export function AddWishList(payload){
-    return{
-        type:'ADD_WISH_LIST',
-        payload
-    }
+  return{
+    type:'ADD_WISH_LIST',
+    payload
+  }
 }
 
 //*GET_NUMBER_WISH_LIST
 export function GetNumberWishList(){
-    return{
-        type:'GET_NUMBER_WISH_LIST',
-    }
+  return{
+    type:'GET_NUMBER_WISH_LIST',
+  }
 }
  
 /*GET NUMBER CART*/
 export function GetNumberCart(){
-    return{
-        type:'GET_NUMBER_CART'
-    }
+  return{
+    type:'GET_NUMBER_CART'
+  }
 }
  
 export function AddCart(payload){
-    return {
-        type:'ADD_CART',
-        payload
-    }
+  return {
+    type:'ADD_CART',
+    payload
+  }
 }
 export function UpdateCart(payload){
-    return {
-        type:'UPDATE_CART',
-        payload
-    }
+  return {
+    type:'UPDATE_CART',
+    payload
+  }
 }
 export function DeleteCart(payload){
-    return{
-        type:'DELETE_CART',
-        payload
-    }
+  return{
+    type:'DELETE_CART',
+    payload
+  }
 }
  
 export function IncreaseQuantity(payload){
-    return{
-        type:'INCREASE_QUANTITY',
-        payload
-    }
+  return{
+    type:'INCREASE_QUANTITY',
+    payload
+  }
 }
 export function DecreaseQuantity(payload){
-    return{
-        type:'DECREASE_QUANTITY',
-        payload
-    }
+  return{
+    type:'DECREASE_QUANTITY',
+    payload
+  }
 }
 

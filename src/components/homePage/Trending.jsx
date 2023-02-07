@@ -34,6 +34,7 @@ function Trending() {
     getAllTrending()
       .then(data => setListTrendingItem(data.data.data))
       .catch(err => console.log(err.message))
+    return () => {setListTrendingItem()}
   },[])
     
   const navigate = useNavigate()
@@ -138,7 +139,5 @@ const BuyButton = styled.a`
   }
   ${mobile({bottom:0})};
 `
-
-
-
 export default Trending;
+

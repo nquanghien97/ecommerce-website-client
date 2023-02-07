@@ -10,12 +10,12 @@ export function getTrending(id) {
     return axios.get(`${API_URL}/trending/${id}`);
 }
 
-export function createTrending() {
-    return axios.post(`${API_URL}/trending`);
+export function createTrending(newData) {
+    return axios.post(`${API_URL}/trending`, newData);
 }
 
-export function updateTrending(id) {
-    return axios.patch(`${API_URL}/trending/${id}`);
+export function updateTrending(id, newData) {
+    return axios.patch(`${API_URL}/trending/${id}`, newData);
 }
 
 export function deleteTrending(id) {

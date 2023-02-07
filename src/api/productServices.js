@@ -10,12 +10,12 @@ export function getProduct(id) {
     return axios.get(`${API_URL}/product/${id}`);
 }
 
-export function createProduct() {
-    return axios.post(`${API_URL}/product`);
+export function createProduct(newData) {
+    return axios.post(`${API_URL}/product`, newData);
 }
 
-export function updateProduct(id) {
-    return axios.patch(`${API_URL}/product/${id}`);
+export function updateProduct(id, newData) {
+    return axios.patch(`${API_URL}/product/${id}`, newData);
 }
 
 export function deleteProduct(id) {

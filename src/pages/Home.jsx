@@ -8,7 +8,7 @@ import Trending from '../components/homePage/Trending'
 import Shoes from '../components/homePage/Shoes'
 import Shoppingfor from '../components/homePage/Shoppingfor'
 import Notifications from '../components/homePage/Notifications'
-import Info from '../components/homePage/Info'
+import Footer from '../components/footer'
 
 function Home() {
 
@@ -23,7 +23,7 @@ function Home() {
       <Shoes />
       <Shoppingfor />
       <Notifications />
-      <Info />
+      <Footer />
     </>
   )
 }

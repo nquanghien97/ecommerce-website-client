@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components'
 import {mobile} from '../../responsive'
 
-function Info() {
+function Footer() {
   return(
     <Container>
       <Wrapper>
@@ -124,4 +124,4 @@ const Item = styled.a`
   padding: 4px 0;
 `
 
-export default Info;
+export default Footer;
