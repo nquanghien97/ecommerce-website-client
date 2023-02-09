@@ -117,7 +117,7 @@ function UpdateProduct() {
 
   return (
     <Container maxWidth={false} style={{display: "flex", height: "100vh", backgroundColor: "rgb(204, 204, 204, 0.9)"}}>
-      <Box sx={{m:"auto"}}>
+      <Box sx={{m:"auto", width: "100%"}} style={{marginTop: "100px"}}>
         <Grid
         display= "flex" 
         flexdirection= "column"
@@ -127,6 +127,8 @@ function UpdateProduct() {
         xs={12}
         item
         style={{
+          display: "flex",
+          flexDirection: "column",
           padding: "28px",
           border: "1px solid black",
           borderRadius: "10px",
@@ -139,7 +141,7 @@ function UpdateProduct() {
           onSubmit={onSubmit}
           validationSchema={validationSchema}
           >
-            <Form className="form">
+            <Form style={{width: "100%"}}>
                 <Grid item xs={12}>
                   <Field
                     className={classes.field}
@@ -161,17 +163,17 @@ function UpdateProduct() {
                     onChange={e => {handleChange(e)}}
                     required
                   />
-                  <Field
-                    className={classes.field}
-                    fullWidth
-                    as={TextField}
-                    value={newData.gender}
-                    label="Gender"
-                    name="gender"
-                    onChange={e => {handleChange(e)}}
-                    required
-                  />
-                  {file ? null : <img src={newData.imageUrl} alt="preview" />}
+                   <div style={{display: "flex", flexDirection: "column", margin: '8px 0'}}>
+                    <select style={{padding: '8px 0', borderRadius: '5px', margin: "4px 0", fontSize: "16px"}} name="gender" onChange={e => {handleChange(e)}} value={newData.gender}>
+                      <option value="" disabled>Gender</option>
+                      <option name="male" value="male">Male</option>
+                      <option name="female" value="female">Female</option>
+                      <option name="all" value="all">All</option>
+                    </select>
+                  </div>
+                  {file ? 
+                    <img style={{maxWidth: "600px", maxHeight: "600px"}} alt="preview" src={URL.createObjectURL(file)} />
+                    : <img style={{maxWidth: "600px", maxHeight: "600px"}} src={newData.imageUrl} alt="preview" />}
                   <input
                     type='file'
                     className={classes.field}
@@ -179,16 +181,13 @@ function UpdateProduct() {
                     name="image"
                     onChange={onFileChange}
                   />
-                  <Field
-                    className={classes.field}
-                    fullWidth
-                    as={TextField}
-                    value={newData.status}
-                    label="Status"
-                    name="status"
-                    onChange={e => {handleChange(e)}}
-                    required
-                  />
+                  <div style={{display: "flex", flexDirection: "column", margin: '8px 0'}}>
+                    <select style={{padding: '8px 0', borderRadius: '5px', margin: "4px 0", fontSize: "16px"}} name="status" onChange={e => {handleChange(e)}} value={newData.status}>
+                      <option value="" disabled>Status</option>
+                      <option name="new" value="new">New</option>
+                      <option name="old" value="old">Old</option>
+                    </select>
+                  </div>
                   <Field
                     className={classes.field}
                     fullWidth
@@ -199,16 +198,13 @@ function UpdateProduct() {
                     onChange={e => {handleChange(e)}}
                     required
                   />
-                  <Field
-                    className={classes.field}
-                    fullWidth
-                    as={TextField}
-                    value={newData.category}
-                    label="Category"
-                    name="category"
-                    onChange={e => {handleChange(e)}}
-                    required
-                  />
+                  <div style={{display: "flex", flexDirection: "column", margin: '8px 0'}}>
+                    <select style={{padding: '8px 0', borderRadius: '5px', margin: "4px 0", fontSize: "16px"}} name="category" onChange={e => {handleChange(e)}} value={newData.category}>
+                      <option value="" disabled>Category</option>
+                      <option name="shoes" value="shoes">Shoes</option>
+                      <option name="clothes" value="clothes">Clothes</option>
+                    </select>
+                  </div>
                 </Grid>
                 <Grid className={classes.btnGroup} item container xs={12}>
                     <Button className={classes.btn} variant="contained" onClick={onSubmit} type="submit">Xác nhận</Button>
