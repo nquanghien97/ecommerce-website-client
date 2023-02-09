@@ -38,7 +38,6 @@ function SignIn() {
     })
   }
 
-  console.log(input)
   return (
     <Container>
       <Content>

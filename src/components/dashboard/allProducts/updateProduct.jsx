@@ -33,8 +33,6 @@ function UpdateProduct() {
 
   const navigate = useNavigate();
 
-  // const [data, setData] = useState();
-
   const [newData, setNewData] = useState({
     name: '',
     description: '',
@@ -44,6 +42,8 @@ function UpdateProduct() {
     price: '',
     category: '',
   });
+
+  const [file, setFile] = useState()
    
   useEffect(() => {
     const fetchProduct = async () => {
@@ -62,11 +62,20 @@ function UpdateProduct() {
       [e.target.name]: e.target.value
     })
   }
+
+  const onFileChange = (e) => {
+    setFile(e.target.files[0])
+  }
   
   const onSubmit = async (e) => {
     e.preventDefault()
+    const formData = new FormData()
+    formData.append('image', file)
+    for( let key in newData) {
+      formData.append(key, newData[key])
+    }
     try {
-      await updateProduct(id, newData)
+      await updateProduct(id, formData)
       navigate("/dashboard/allproducts")
     } catch (error) {
       console.log("Something is Wrong")
@@ -83,8 +92,6 @@ function UpdateProduct() {
     description: Yup.string()
       .required('Trường này là bắt buộc'),
     gender: Yup.string()
-      .required('Trường này là bắt buộc'),
-    imageUrl: Yup.string()
       .required('Trường này là bắt buộc'),
     status: Yup.string()
       .required('Trường này là bắt buộc'),
@@ -126,7 +133,7 @@ function UpdateProduct() {
           backgroundColor: "#94B49F"
         }}
         >
-          <Typography variant="h4" sx={{mb:2}}>Thêm Quốc Gia</Typography>
+          <Typography variant="h4" sx={{mb:2}}>Update Product</Typography>
           <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
@@ -164,15 +171,13 @@ function UpdateProduct() {
                     onChange={e => {handleChange(e)}}
                     required
                   />
-                  <Field
+                  {file ? null : <img src={newData.imageUrl} alt="preview" />}
+                  <input
+                    type='file'
                     className={classes.field}
-                    fullWidth
-                    as={TextField}
-                    value={newData.imageUrl}
-                    label="imageUrl"
-                    name="imageUrl"
-                    onChange={e => {handleChange(e)}}
-                    required
+                    label="image"
+                    name="image"
+                    onChange={onFileChange}
                   />
                   <Field
                     className={classes.field}
