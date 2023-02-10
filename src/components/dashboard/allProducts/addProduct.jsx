@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createProduct } from '../../../api/productServices';
 import { useNavigate } from 'react-router-dom';
-import { Container, Box, Grid, Typography, TextField, Button } from '@material-ui/core';
+import { Container, Box, Grid, Typography, TextField, Button, CircularProgress  } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { makeStyles } from '@material-ui/core/styles';
@@ -39,8 +39,8 @@ function CreateProduct() {
     price: '',
     category: '',
   });
-
-  const [file, setFile] = useState()
+  const [file, setFile] = useState();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setNewData({
@@ -55,6 +55,7 @@ function CreateProduct() {
   
   const onSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
     const formData = new FormData()
     formData.append('image', file)
     for( let key in newData) {
@@ -62,6 +63,7 @@ function CreateProduct() {
     }
     try {
       await createProduct(formData)
+      setLoading(false)
       navigate("/dashboard/allproducts")
     } catch (error) {
       console.log("Something is Wrong")
@@ -191,7 +193,10 @@ function CreateProduct() {
                   </div>
                 </Grid>
                 <Grid className={classes.btnGroup} item container xs={12}>
-                    <Button className={classes.btn} variant="contained" onClick={onSubmit}>Xác nhận</Button>
+                    <Button className={classes.btn} variant="contained" onClick={onSubmit}>
+                      {loading? <CircularProgress style={{marginRight:'8px', width:'20px', height:'20px'}}/> : null}
+                      Xác nhận
+                    </Button>
                     <Button className={classes.btn} variant="contained" onClick={handleCancelClick}>Hủy</Button>
                 </Grid>
               </Form>

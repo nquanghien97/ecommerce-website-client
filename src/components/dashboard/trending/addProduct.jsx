@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createTrending } from '../../../api/trendingServices';
 import { useNavigate } from 'react-router-dom';
-import { Container, Box, Grid, Typography, TextField, Button } from '@material-ui/core';
+import { Container, Box, Grid, Typography, TextField, Button, CircularProgress } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { makeStyles } from '@material-ui/core/styles';
@@ -34,10 +34,9 @@ function CreateTrendingProduct() {
   const [newData, setNewData] = useState({
     name: '',
     description: '',
-    imageUrl: '',
   });
-
-  console.log(newData)
+  const [file, setFile] = useState();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setNewData({
@@ -45,11 +44,22 @@ function CreateTrendingProduct() {
       [e.target.name]: e.target.value
     })
   }
+
+  const onFileChange = (e) => {
+    setFile(e.target.files[0])
+  }
   
   const onSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
+    const formData = new FormData()
+    formData.append('image', file)
+    for( let key in newData) {
+      formData.append(key, newData[key])
+    }
     try {
-      await createTrending(newData)
+      await createTrending(formData)
+      setLoading(false)
       navigate("/dashboard/trending")
     } catch (error) {
       console.log("Something is Wrong")
@@ -65,14 +75,11 @@ function CreateTrendingProduct() {
       .required('Trường này là bắt buộc'),
     description: Yup.string()
       .required('Trường này là bắt buộc'),
-    imageUrl: Yup.string()
-      .required('Trường này là bắt buộc'),
   });
   
   const initialValues = {
     name: '',
     description: '',
-    imageUrl: '',
   };
   
   if(!newData) return (
@@ -125,19 +132,20 @@ function CreateTrendingProduct() {
                     onChange={e => {handleChange(e)}}
                     required
                   />
-                  <Field
+                  {file ? <img style={{maxWidth: "600px", maxHeight: "600px"}} alt="preview" src={URL.createObjectURL(file)} /> : null }
+                  <input
+                    type='file'
                     className={classes.field}
-                    fullWidth
-                    as={TextField}
-                    value={newData.imageUrl}
-                    label="imageUrl"
-                    name="imageUrl"
-                    onChange={e => {handleChange(e)}}
-                    required
+                    label="image"
+                    name="image"
+                    onChange={onFileChange}
                   />
                 </Grid>
                 <Grid className={classes.btnGroup} item container xs={12}>
-                    <Button className={classes.btn} variant="contained" onClick={onSubmit} type="submit">Xác nhận</Button>
+                    <Button className={classes.btn} variant="contained" onClick={onSubmit} type="submit">
+                      {loading? <CircularProgress style={{marginRight:'8px', width:'20px', height:'20px'}}/> : null}
+                      Xác nhận
+                    </Button>
                     <Button className={classes.btn} variant="contained" onClick={handleCancelClick}>Hủy</Button>
                 </Grid>
               </Form>

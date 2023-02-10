@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button } from '@material-ui/core';
+import { Container, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button, CircularProgress } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -19,6 +19,13 @@ const useStyles = makeStyles({
   },
   row: {
     position: 'relative',
+  },
+  loading: {
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 })
 
@@ -30,19 +37,31 @@ function AllProducts() {
 
   const [data, setData] = useState()
   const [showDel, setShowDel] = useState(false);
-  const [id, setId] = useState()
+  const [id, setId] = useState();
+  const [loading, setLoading] = useState(false);
   
   useEffect(() => {
     let isMounted = true;
+    setLoading(true)
+
     const fetchProducts = async () => await getAllProducts()
       .then(res => {
         if(isMounted) 
-        setData(res.data?.product)
+        setData(res.data?.product);
+        setLoading(false);
       })
       .catch(err => console.log(err.message))
     fetchProducts()
     return () => { isMounted = false;}
   }, []);
+
+  if(loading) {
+    return (
+      <Box className={classes.loading}>
+        <CircularProgress />
+      </Box>
+    )
+  }
 
   return (
     <Container>

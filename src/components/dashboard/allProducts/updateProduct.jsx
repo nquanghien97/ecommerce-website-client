@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getProduct, updateProduct } from '../../../api/productServices';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Box, Grid, Typography, TextField, Button } from '@material-ui/core';
+import { Container, Box, Grid, Typography, TextField, Button, CircularProgress } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { makeStyles } from '@material-ui/core/styles';
@@ -37,13 +37,13 @@ function UpdateProduct() {
     name: '',
     description: '',
     gender: '',
-    imageUrl: '',
     status: '',
     price: '',
     category: '',
   });
 
-  const [file, setFile] = useState()
+  const [file, setFile] = useState();
+  const [loading, setLoading] = useState(false);
    
   useEffect(() => {
     const fetchProduct = async () => {
@@ -69,6 +69,7 @@ function UpdateProduct() {
   
   const onSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true);
     const formData = new FormData()
     formData.append('image', file)
     for( let key in newData) {
@@ -76,6 +77,7 @@ function UpdateProduct() {
     }
     try {
       await updateProduct(id, formData)
+      setLoading(false);
       navigate("/dashboard/allproducts")
     } catch (error) {
       console.log("Something is Wrong")
@@ -105,7 +107,6 @@ function UpdateProduct() {
     name: '',
     description: '',
     gender: '',
-    imageUrl: '',
     status: '',
     price: '',
     category: '',
@@ -207,7 +208,10 @@ function UpdateProduct() {
                   </div>
                 </Grid>
                 <Grid className={classes.btnGroup} item container xs={12}>
-                    <Button className={classes.btn} variant="contained" onClick={onSubmit} type="submit">Xác nhận</Button>
+                    <Button className={classes.btn} variant="contained" onClick={onSubmit} type="submit">
+                      {loading? <CircularProgress style={{marginRight:'8px', width:'20px', height:'20px'}}/> : null}
+                      Xác nhận
+                    </Button>
                     <Button className={classes.btn} variant="contained" onClick={handleCancelClick}>Hủy</Button>
                 </Grid>
               </Form>
