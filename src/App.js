@@ -13,7 +13,6 @@ function App() {
       <Route path='/*' element={roles === "admin" ? <Navigate to="/dashboard/" replace />: <Client />} />
       <Route path='/dashboard/*' element={roles === "admin" ? <DashBoard /> : <Client />} />
     </Routes>
-    // element={ currentUser ? <Navigate to="/" replace /> : <SignIn />} />
   )
 }
 
