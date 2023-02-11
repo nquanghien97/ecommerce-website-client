@@ -42,7 +42,7 @@ function Shoes() {
   }, [dispatch])
 
   const data = useSelector((state) => state._todoProduct._shoes?.product)
-  const loading = useSelector((state) => state._todoProduct._loading)
+  const loading = useSelector((state) => state._todoProduct.isLoading)
 
   return(
     <Container>
@@ -130,6 +130,9 @@ const Slide = styled.div`
 const Img = styled.img`
   width: 100%;
   max-height: 190px;
+  ${mobile({
+    maxHeight: '388px'
+  })}
 `
 
 const Icon = styled.div`
