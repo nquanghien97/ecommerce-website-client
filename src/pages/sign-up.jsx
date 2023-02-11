@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { mobile } from '../responsive';
-import { register, login } from '../redux/User/user.actions';
+import { register } from '../redux/User/user.actions';
 import { Link } from 'react-router-dom';
 import { CircularProgress } from '@material-ui/core';
 
