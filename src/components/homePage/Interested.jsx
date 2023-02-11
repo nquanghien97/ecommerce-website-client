@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
@@ -9,7 +9,7 @@ import "react-multi-carousel/lib/styles.css";
 import {mobile} from '../../responsive';
 import { actFetchClothesRequest, AddWishList } from '../../redux/Products/actions';
 import { useSelector, useDispatch } from 'react-redux';
-
+import { CircularProgress } from '@material-ui/core';
 
 function Interested() {
   //Slider
@@ -55,11 +55,11 @@ function Interested() {
   } 
 
   useEffect(() => {
-    const fetchClothes = async () => await dispatch(actFetchClothesRequest())
-    fetchClothes()
+    dispatch(actFetchClothesRequest())
   }, [dispatch])
 
   const data = useSelector((state) => state._todoProduct._clothes.product)
+  const loading = useSelector((state) => state._todoProduct.loading)
 
   return(
     <Container>
@@ -68,31 +68,37 @@ function Interested() {
           STILL INTERESTED?
         </InterestedText>
       </InterestedContainer>
-      <Wrapper>
-        {data && (
-          <Carousel 
-            arrows={false}
-            renderButtonGroupOutside={true}
-            customButtonGroup={<ButtonGroup />}
-            responsive={responsive}>
-              {data.map((item) => (
-                <div key={item._id}>
-                  <Link to={`/product/${item._id}`}>
-                    <Slide>
-                      <Image src={item.imageUrl} />
-                      <Price> {Number(item.price).toLocaleString('en-US')}đ </Price>
-                      <Title> {item.name} </Title> 
-                      <Des> {item.description} </Des>
-                    </Slide>
-                  </Link>
-                  <Icon>
-                    <FavoriteBorderIcon onClick={()=>addWishList(item)} className='icon' />
-                  </Icon>
-                </div>
-              ))}
-          </Carousel> 
-        )}
-      </Wrapper>
+      {loading ? 
+        <Loading>
+          <CircularProgress />
+        </Loading>
+       : 
+        <Wrapper>
+          {data && (
+            <Carousel 
+              arrows={false}
+              renderButtonGroupOutside={true}
+              customButtonGroup={<ButtonGroup />}
+              responsive={responsive}>
+                {data?.map((item) => (
+                  <div key={item._id}>
+                    <Link to={`/product/${item._id}`}>
+                      <Slide>
+                        <Image src={item.imageUrl} />
+                        <Price> {Number(item.price).toLocaleString('en-US')}đ </Price>
+                        <Title> {item.name} </Title>
+                        <Des> {item.description} </Des>
+                      </Slide>
+                    </Link>
+                    <Icon>
+                      <FavoriteBorderIcon onClick={()=>addWishList(item)} className='icon' />
+                    </Icon>
+                  </div>
+                ))}
+            </Carousel> 
+          )}
+        </Wrapper>
+      }
     </Container>
   )}
 
@@ -142,6 +148,12 @@ const IconItems = styled.div`
       color: white;
       cursor: pointer;
   }
+`
+
+const Loading = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 const Wrapper = styled.div`

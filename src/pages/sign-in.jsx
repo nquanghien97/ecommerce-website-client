@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { mobile } from '../responsive';
 import { login } from '../redux/User/user.actions';
+import { CircularProgress } from '@material-ui/core';
 
 function SignIn() {
 
@@ -37,6 +38,8 @@ function SignIn() {
       [name]: value
     })
   }
+  const loading = useSelector((state) => state.user.isLoading)
+  console.log(loading)
 
   return (
     <Container>
@@ -60,7 +63,10 @@ function SignIn() {
           />
         </Wrapper>
         <ButtonWrapper>
-          <Button type="submit">Đăng nhập</Button>
+          <Button type="submit">
+            {loading ? <CircularProgress style={{marginRight:'8px', width:'20px', height:'20px'}} /> : null}
+            Đăng nhập
+          </Button>
         </ButtonWrapper>
       </Form>
       <SignUpWrapper>
@@ -130,6 +136,7 @@ const Input = styled.input`
 `
 
 const Button = styled.button`
+  font-size: 20px;
   padding: 10px 40px;
   border-radius: 5px;
   cursor: pointer;

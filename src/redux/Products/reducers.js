@@ -1,4 +1,17 @@
-import {GET_ALL_PRODUCT,GET_NUMBER_CART,ADD_CART, DECREASE_QUANTITY, INCREASE_QUANTITY, DELETE_CART, GET_ALL_CLOTHES, GET_ALL_SHOES, ADD_WISH_LIST, GET_NUMBER_WISH_LIST} from  './actions';
+import {
+  GET_ALL_PRODUCT,
+  GET_NUMBER_CART,
+  ADD_CART,
+  DECREASE_QUANTITY,
+  INCREASE_QUANTITY,
+  DELETE_CART,
+  GET_ALL_CLOTHES,
+  GET_ALL_SHOES,
+  ADD_WISH_LIST,
+  GET_NUMBER_WISH_LIST,
+  FETCH_PRODUCTS_PENDING,
+  FETCH_PRODUCTS_ERROR
+} from  './actions';
  
 const initProduct = {
     numberCart:0,
@@ -7,24 +20,39 @@ const initProduct = {
     _products:[],
     _clothes:[],
     WishList:[],
+    loading: false,
+    error: null,
 }
  
 export default function todoProduct(state = initProduct, action){
     switch(action.type){
+        case FETCH_PRODUCTS_PENDING:
+          return {
+            ...state,
+            loading: true,
+          }
+        case FETCH_PRODUCTS_ERROR:
+          return {
+            ...state,
+            error: action.error
+          }
         case GET_ALL_PRODUCT:
             return{
                 ...state,
-                _products:action.payload
+                _products:action.payload,
+                loading: false,
             }
         case GET_ALL_CLOTHES:
             return{
                 ...state,
-                _clothes:action.payload
+                _clothes:action.payload,
+                loading: false,
             }
         case GET_ALL_SHOES:
             return {
                 ...state,
-                _shoes: action.payload
+                _shoes: action.payload,
+                loading: false,
             }
         case GET_NUMBER_CART:
                 return{

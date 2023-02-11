@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { mobile } from '../responsive';
-import { register } from '../redux/User/user.actions';
+import { register, login } from '../redux/User/user.actions';
 import { Link } from 'react-router-dom';
+import { CircularProgress } from '@material-ui/core';
 
 function SignUp() {
 
   const dispatch = useDispatch();
+
+  const loading = useSelector((state) => state.user.isLoading)
 
   const [input, setInput] = useState({
     fullName: '',
@@ -93,7 +96,10 @@ function SignUp() {
           />
         </Wrapper>
         <ButtonWrapper>
-          <Button>Đăng ký</Button>
+          <Button>
+            {loading ? <CircularProgress style={{marginRight:'8px', width:'20px', height:'20px'}} /> : null}
+            Đăng ký
+          </Button>
         </ButtonWrapper>
         <SignInWrapper>
           Bạn đã có tài khoản?
@@ -165,6 +171,7 @@ const ButtonWrapper = styled.div`
 `
 
 const Button = styled.button`
+  font-size: 20px;
   padding: 10px 40px;
   border-radius: 5px;
   cursor: pointer;

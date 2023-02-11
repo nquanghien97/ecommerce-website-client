@@ -12,31 +12,57 @@ export const GET_ALL_CLOTHES = 'GET_ALL_CLOTHES';
 export const GET_ALL_SHOES = 'GET_ALL_SHOES';
 export const ADD_WISH_LIST = 'ADD_WISH_LIST';
 export const GET_NUMBER_WISH_LIST= 'GET_NUMBER_WISH_LIST';
+export const FETCH_PRODUCTS_PENDING = 'FETCH_PRODUCTS_PENDING';
+export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
+export const FETCH_PRODUCTS_ERROR = 'FETCH_PRODUCTS_ERROR';
+
+export const fetchProductsPending = () => {
+  return {
+    type: FETCH_PRODUCTS_PENDING
+  }
+}
+
+export const fetchProductsError = (error) => {
+  return {
+    type: FETCH_PRODUCTS_ERROR,
+    error
+  }
+}
 
 export const actFetchProductsRequest = () => {
-  return (dispatch) => {
-    return getAllProducts().then(res => {
+  return async (dispatch) => {
+      dispatch(fetchProductsPending())
+    try {
+      const res = await getAllProducts();
       dispatch(GetAllProduct(res.data));
-    });
+    } catch (err) {
+      dispatch(fetchProductsError(err));
+    }
   }
 }
 
 export const actFetchShoesRequest = () => {
-  return (dispatch) => {
-    return getShoes()
-      .then(res => {
-        dispatch(GetAllShoes(res.data));
-    });
+  return async (dispatch) => {
+      dispatch(fetchProductsPending())
+    try {
+      const res = await getShoes();
+      dispatch(GetAllShoes(res.data));
+    } catch (err) {
+      dispatch(fetchProductsError(err));
+    }
   }
 }
 
 export const actFetchClothesRequest = () => {
-  return (dispatch) => {
-    return getClothes()
-      .then(res => {
-        dispatch(GetAllClothes(res.data));
-      });
-  }
+  return async (dispatch) => {
+    dispatch(fetchProductsPending())
+    try {
+      const res = await getClothes();
+      dispatch(GetAllClothes(res.data));
+    } catch (err) {
+      dispatch(fetchProductsError(err));
+    }
+  } 
 }
 
 /*GET_ALL_PRODUCT*/

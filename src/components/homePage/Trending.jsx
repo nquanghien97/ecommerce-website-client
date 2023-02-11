@@ -5,6 +5,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import {mobile} from '../../responsive';
 import { getAllTrending } from '../../api/trendingServices';
+import { CircularProgress } from '@material-ui/core';
  
 
 function Trending() {
@@ -28,12 +29,21 @@ function Trending() {
   };
 
   const [listTrendingitem, setListTrendingItem] = useState()
+  const [loading, setLoading] = useState(false);
 
   //fetch api
   useEffect(() => {
-    getAllTrending()
-      .then(data => setListTrendingItem(data.data.data))
-      .catch(err => console.log(err.message))
+    setLoading(true);
+    try {
+      const fetchTrending = async () => {
+        const res = await getAllTrending()
+        setListTrendingItem(res.data.data)
+        setLoading(false);
+      }
+      fetchTrending()
+    } catch (error) {
+      console.log(error)
+    }
     return () => {setListTrendingItem()}
   },[])
     
@@ -42,28 +52,35 @@ function Trending() {
   const goToProducts = () => {
     navigate('/allproducts')
   }
+  console.log(loading)
     
   return(
     <>
       <Text>What's Hot</Text>
       <Container>
-        <Wrapper>
-          {listTrendingitem && (
-            <Carousel 
-              responsive={responsive}>
-                {listTrendingitem.map((item) => (
-                  <Slide key={item._id} onClick={goToProducts}>
-                    <Img src={item.imageUrl} />
-                    <TextContainer>
-                      <Title>{item.name}</Title>
-                      <Des>{item.description}</Des>
-                      <BuyButton>{item.buy}</BuyButton>
-                    </TextContainer>
-                  </Slide>
-                ))}
-            </Carousel>
-          )}
-        </Wrapper>
+        {loading ?
+          <Loading>
+            <CircularProgress />
+          </Loading>
+          :
+          <Wrapper>
+            {listTrendingitem && (
+              <Carousel 
+                responsive={responsive}>
+                  {listTrendingitem.map((item) => (
+                    <Slide key={item._id} onClick={goToProducts}>
+                      <Img src={item.imageUrl} />
+                      <TextContainer>
+                        <Title>{item.name}</Title>
+                        <Des>{item.description}</Des>
+                        <BuyButton>{item.buy}</BuyButton>
+                      </TextContainer>
+                    </Slide>
+                  ))}
+              </Carousel>
+            )}
+          </Wrapper>
+        }
       </Container>
     </>
   )} 
@@ -82,6 +99,12 @@ const Container = styled.div`
   padding: 0 15px;
   margin-bottom: 100px;
   ${mobile({padding:0, marginBottom:20})};
+`
+
+const Loading = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 const Wrapper = styled.div`

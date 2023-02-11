@@ -1,14 +1,22 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, SET_MESSAGE } from './user.type';
+import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, SET_MESSAGE, LOADING } from './user.type';
 import { loginUser } from '../../api/auth/loginServices';
 import { registerUser } from '../../api/auth/registerServices';
 import { logOut } from '../../api/auth/logoutServices';
 
+export const loading = () => {
+  return {
+    type: LOADING
+  }
+}
+
 export const register = (username, password, fullName) => (dispatch) => {
+  dispatch(loading())
   return registerUser(username, password, fullName)
     .then(
       (res) => {
       dispatch({
         type: REGISTER_SUCCESS,
+        payload: { user: res },
       })
 
       dispatch({
@@ -35,6 +43,7 @@ export const register = (username, password, fullName) => (dispatch) => {
 
 export const login = (username, password) => {
   return (dispatch) => {
+    dispatch(loading())
     return loginUser(username, password).then(
       (data) => {
         dispatch({
@@ -63,6 +72,7 @@ export const login = (username, password) => {
 };
 
 export const logout = () => (dispatch) => {
+  dispatch(loading())
   logOut()
 
   dispatch({

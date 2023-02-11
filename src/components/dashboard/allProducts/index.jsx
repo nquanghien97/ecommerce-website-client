@@ -43,7 +43,6 @@ function AllProducts() {
   useEffect(() => {
     let isMounted = true;
     setLoading(true)
-
     const fetchProducts = async () => await getAllProducts()
       .then(res => {
         if(isMounted) 
