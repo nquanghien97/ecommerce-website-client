@@ -1,15 +1,21 @@
 import styled from "styled-components";
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AddCart, AddWishList } from '../redux/Products/actions';
 import { mobile } from '../responsive';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { useSelector, useDispatch } from "react-redux";
 
-function WishList(props) {
+function WishList() {
 
-  const { WishList, numberWishList } = props.items;
+  const dispatch = useDispatch();
 
-  console.log(WishList[0])
+  const addWishList = (item) => dispatch(AddWishList(item))
+  const addCart = (item) => dispatch(AddCart(item))
+
+  const WishList = useSelector((state) => state._todoProduct.WishList)
+  const numberWishList = useSelector((state) => state._todoProduct.numberWishList)
+
+  console.log(WishList)
   return (
     <Container>
       <H1>MY WISHLISH</H1>
@@ -17,18 +23,18 @@ function WishList(props) {
       <Wrapper>
         {WishList.map((item, index) => (
             <ItemContainer key={index}>
-              <Link to={`/product/${item.name}`}>
+              <Link to={`/product/${item._id}`}>
                 <Content>
-                  <Image src={item.avatar} />
+                  <Image src={item.imageUrl} />
                   <Price>{Number(item.price).toLocaleString('en-US')}đ</Price>
                   <Name>{item.name}</Name>
                 </Content>
               </Link>
-              <Cart onClick={() => {props.AddCart(WishList[index])}}>
+              <Cart onClick={() => {addCart(WishList[index])}}>
                 Thêm vào giỏ hàng
               </Cart>
               <Icon>
-                <FavoriteBorderIcon className='icon' onClick={()=> props.AddWishList(item)} />
+                <FavoriteBorderIcon className='icon' onClick={()=> addWishList(item)} />
               </Icon>
             </ItemContainer>
         ))}
@@ -113,17 +119,4 @@ const Cart = styled.button`
   }
 `
 
-const mapStateToProps = state =>{
-  return{
-      items:state._todoProduct,
-  }
-}
-
-function mapDispatchToProps(dispatch){
-  return{
-      AddCart:item=>dispatch(AddCart(item)),
-      AddWishList:item=>dispatch(AddWishList(item)),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(WishList)
+export default WishList;

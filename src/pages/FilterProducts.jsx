@@ -5,9 +5,23 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { useDispatch } from 'react-redux';
 import { AddWishList } from '../redux/Products/actions';
 import { mobile } from '../responsive';
-import { filterServices } from '../api/filterServices'
+import { filterServices } from '../api/filterServices';
+import { Box, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  loading: {
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 
 function Product() {
+
+  const classes = useStyles();
 
   const navigate = useNavigate();
 
@@ -15,7 +29,8 @@ function Product() {
 
   const dispatch = useDispatch();
 
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const goToProduct = (id) => {
     navigate(`/product/${id}`)
@@ -26,17 +41,27 @@ function Product() {
   }
 
   useEffect(() => {
+    setLoading(true);
     const fetchProduct = async () => {
-      await filterServices(pathname)
-      .then(data => setProduct(data.data.product))
-      .catch(err => console.log(err.message))
+      try {
+       const data = await filterServices(pathname)
+        setProduct(data.data.product)
+        setLoading(false);
+      } catch (err) {
+        console.error(err)
+      } 
     }
     fetchProduct()
   },[pathname])
 
-  if(!product) {
-    return <div>Loading...</div>
+  if(loading) {
+    return (
+      <Box className={classes.loading}>
+        <CircularProgress />
+      </Box>
+    )
   }
+
   return (
     <Container>
     <Wrapper>

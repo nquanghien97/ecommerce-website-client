@@ -5,10 +5,24 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import {actFetchProductsRequest, AddWishList} from '../redux/Products/actions';
 import { mobile } from '../responsive';
 import { useSelector, useDispatch } from 'react-redux';
+import { Box, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  loading: {
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 
 function AllProducts() {
 
-  const navigate = useNavigate()
+  const classes = useStyles();
+
+  const navigate = useNavigate();
 
   const goToProduct = (id) => {
     navigate(`/product/${id}`)
@@ -26,6 +40,15 @@ function AllProducts() {
   }, [dispatch])
 
   const data = useSelector((state) => state._todoProduct._products?.product)
+  const loading = useSelector((state) => state._todoProduct.loading)
+
+  if(loading) {
+    return (
+      <Box className={classes.loading}>
+        <CircularProgress />
+      </Box>
+    )
+  }
   
   return (
     <Container>

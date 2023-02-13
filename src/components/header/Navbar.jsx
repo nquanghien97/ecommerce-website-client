@@ -78,7 +78,8 @@ function Navbar(props) {
   }
 
   const goToSearchResult = () => {
-    navigate(`search?name=${textSearch}`)
+    navigate(`search?name=${textSearch}`);
+    setIsComponentVisible(false)
   }
 
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(true)
@@ -137,7 +138,7 @@ function Navbar(props) {
                             </div>
                           </div>
                       ))}
-                      {dataSearch ? (
+                      {dataSearch.length ? (
                         <div className="more">
                           <p className="more-btn" onClick={goToSearchResult}>Xem thêm ...</p>
                         </div>
@@ -171,7 +172,6 @@ function Navbar(props) {
                   BackdropProps={{
                     style:{backgroundColor: 'transparent'}
                   }}
-
                 >
                   <>
                    <Profile /> 
@@ -209,16 +209,16 @@ function Navbar(props) {
 
  const NavbarContainer = styled.nav`
   position: fixed;
+  width: 100vw;
   top: 0;
   background-color: #28a8e9;
   border-bottom: 1px solid #ccc;
   z-index: 1001;
-  width: 100%;
   display: flex;
   flex-direction: column;
   @media (min-width: 700px) {
     height: 70px;
-  }
+  };
 `;
 
  const LeftContainer = styled.div`
@@ -324,7 +324,9 @@ const Right = styled.div`
   align-items: center;
   justify-content: flex-end;
   z-index: 10;
-  ${mobile({})};
+  ${mobile({
+    paddingRight: '5%',
+  })};
 `
 
 const SearchContainer = styled.div`

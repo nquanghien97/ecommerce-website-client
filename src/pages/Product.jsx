@@ -6,14 +6,29 @@ import { useDispatch } from 'react-redux';
 import { AddCart, AddWishList } from '../redux/Products/actions';
 import { mobile } from '../responsive';
 import { getProduct } from '../api/productServices';
+import { Box, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-function Product(props) {
+const useStyles = makeStyles({
+  loading: {
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
+
+function Product() {
+
+  const classes = useStyles();
 
   const { id } = useParams();
 
   const dispatch = useDispatch();
 
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const addCart = (item) => {
     dispatch(AddCart(item))
@@ -24,18 +39,27 @@ function Product(props) {
   }
 
   useEffect(() => {
+    setLoading(true);
     const fetchProduct = async () => {
-      await getProduct(id)
-      .then(data => setProduct(data.data.product))
-      .catch(err => console.log(err.message))
+      try {
+        const data = await getProduct(id)
+        setProduct(data.data.product)
+        setLoading(false);
+      } catch(err) {
+        console.log(err.message)
+      } 
     }
     fetchProduct()
   },[id])
 
-  console.log(product)
-  if(!product) {
-    return <div>Loading...</div>
+  if(loading) {
+    return (
+      <Box className={classes.loading}>
+        <CircularProgress />
+      </Box>
+    )
   }
+
   return (
     <Container>
       <Left>

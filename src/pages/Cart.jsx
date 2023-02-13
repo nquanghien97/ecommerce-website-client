@@ -3,9 +3,20 @@ import { connect } from 'react-redux';
 import ClearIcon from '@material-ui/icons/Clear';
 import { IncreaseQuantity, DecreaseQuantity, DeleteCart } from '../redux/Products/actions';
 import { mobile } from '../responsive';
+import { useSelector, useDispatch} from 'react-redux';
 
-function Cart({items,IncreaseQuantity,DecreaseQuantity,DeleteCart}) {
-  console.log(items)
+function Cart() {
+
+  const dispatch = useDispatch();
+
+  const items = useSelector(state => state._todoProduct)
+
+  const increaseQuantity = (index) => dispatch(IncreaseQuantity(index))
+
+  const decreaseQuantity = (index) => dispatch(DecreaseQuantity(index))
+
+  const deleteCart = (index) => dispatch(DeleteCart(index))
+
   let ListCart = [];
   let TotalCart = 0;
   Object.keys(items.Carts).forEach(function(item){
@@ -13,7 +24,6 @@ function Cart({items,IncreaseQuantity,DecreaseQuantity,DeleteCart}) {
     ListCart.push(items.Carts[item]);
   });
 
-  console.log(ListCart)
   return (
     <Container>
       <Left>
@@ -38,13 +48,13 @@ function Cart({items,IncreaseQuantity,DecreaseQuantity,DeleteCart}) {
                       <TextDes>Mặt hàng có sẵn mới nhất</TextDes>
                     </Description>
                     <Action>
-                      <ClearIcon onClick={()=>DeleteCart(index)} />
+                      <ClearIcon onClick={()=>deleteCart(index)} />
                     </Action>
                   </DesWrapper>
                   <Amount>
-                    <Span style={{cursor: 'pointer'}} onClick={()=>DecreaseQuantity(index)}>-</Span>
+                    <Span style={{cursor: 'pointer'}} onClick={()=>decreaseQuantity(index)}>-</Span>
                     <Span>{item.quantity}</Span>
-                    <Span style={{cursor: 'pointer'}} onClick={()=>IncreaseQuantity(index)}>+</Span>
+                    <Span style={{cursor: 'pointer'}} onClick={()=>increaseQuantity(index)}>+</Span>
                   </Amount>
                 </RightContent>
               </Wrapper>
