@@ -8,6 +8,7 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
   },
 })
 
@@ -17,7 +18,7 @@ function DashBoard() {
   return (
     <Container className={classes.container}>
       <Box>
-        <Typography variant="h1">Welcome to DashBoard</Typography>
+        <Typography style={{fontSize: '70px'}}>Welcome to DashBoard</Typography>
       </Box>
     </Container>
   )

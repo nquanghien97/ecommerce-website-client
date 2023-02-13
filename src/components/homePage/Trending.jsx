@@ -52,7 +52,6 @@ function Trending() {
   const goToProducts = () => {
     navigate('/allproducts')
   }
-  console.log(loading)
     
   return(
     <>

@@ -42,7 +42,9 @@ function Shoes() {
   }, [dispatch])
 
   const data = useSelector((state) => state._todoProduct._shoes?.product)
-  const loading = useSelector((state) => state._todoProduct.isLoading)
+  const loading = useSelector((state) => state._todoProduct.loading)
+
+  console.log(loading)
 
   return(
     <Container>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button, CircularProgress } from '@material-ui/core';
+import Pagination from '@material-ui/lab/Pagination';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -7,6 +8,7 @@ import DeleteProduct from './deleteProduct';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { getAllProducts } from '../../../api/productServices';
+import { paginationServices } from '../../../api/pagination';
 
 const useStyles = makeStyles({
   container: {
@@ -26,6 +28,12 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  pagitnation: {
+    margin: '12px 0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 })
 
@@ -35,7 +43,8 @@ function AllProducts() {
 
   const navigate = useNavigate();
 
-  const [data, setData] = useState()
+  const [data, setData] = useState();
+  const [page, setPage] = useState(1);
   const [showDel, setShowDel] = useState(false);
   const [id, setId] = useState();
   const [loading, setLoading] = useState(false);
@@ -43,16 +52,20 @@ function AllProducts() {
   useEffect(() => {
     let isMounted = true;
     setLoading(true)
-    const fetchProducts = async () => await getAllProducts()
+    const fetchProducts = async () => await paginationServices(page)
       .then(res => {
         if(isMounted) 
-        setData(res.data?.product);
+        setData(res.data);
         setLoading(false);
       })
       .catch(err => console.log(err.message))
     fetchProducts()
     return () => { isMounted = false;}
-  }, []);
+  }, [page]);
+
+  const handleChangePagination = (e, numberPage) => {
+    setPage(numberPage)
+  }
 
   if(loading) {
     return (
@@ -77,7 +90,7 @@ function AllProducts() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.map((product) => {
+              {data?.product.map((product) => {
                 return (
                   <TableRow key={product._id}>
                     <TableCell>
@@ -102,6 +115,14 @@ function AllProducts() {
             </TableBody>
           </Table>
         </TableContainer>
+        <Box className={classes.pagitnation}>
+          <Pagination
+            onChange={handleChangePagination}
+            page={page}
+            count={data?.totalPages}
+            color="primary"
+          />
+        </Box>
       </Box>
     </Container>
   )
