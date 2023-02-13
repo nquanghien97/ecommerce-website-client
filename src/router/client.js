@@ -10,6 +10,7 @@ import SignUp from '../pages/sign-up';
 import WishList from '../pages/wishList';
 import AllProducts from '../pages/AllProducts';
 import FilterProducts from '../pages/FilterProducts';
+import SearchResult from '../pages/SearchResult';
 
 function Client() {
 
@@ -28,6 +29,7 @@ function Client() {
         <Route path='/allproducts' element={<AllProducts />} />
         <Route path='/female' element={<FilterProducts />} />
         <Route path='/male' element={<FilterProducts />} />
+        <Route path='/search' element={<SearchResult />}/>
       </Routes>
     </>
   )

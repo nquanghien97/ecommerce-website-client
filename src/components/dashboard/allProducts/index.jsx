@@ -7,7 +7,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteProduct from './deleteProduct';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
-import { getAllProducts } from '../../../api/productServices';
 import { paginationServices } from '../../../api/pagination';
 
 const useStyles = makeStyles({

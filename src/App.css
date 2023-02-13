@@ -31,6 +31,7 @@ a {
   cursor: pointer;
   border-bottom: 1px solid;
   border-radius:4px;
+  display: flex;
 }
 
 .search-item:hover {
@@ -43,4 +44,30 @@ a {
     width: 100%;
     top: 117px;
   }
+}
+
+.img > img {
+  max-width: 120px;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 12px;
+}
+
+.more {
+  margin: 8px 0px;
+}
+
+.more-btn {
+  padding: 4px 12px;
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+}
+
+.more-btn:hover {
+  opacity: 0.6;
 }

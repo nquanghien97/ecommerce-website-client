@@ -7,12 +7,12 @@ import ClearIcon from '@material-ui/icons/Clear';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import FavoriteBorderSharpIcon from '@material-ui/icons/FavoriteBorderSharp';
-import { Badge } from '@material-ui/core';
+import { Badge, Modal } from '@material-ui/core';
 import { mobile } from '../../responsive';
 import { Link, useNavigate } from 'react-router-dom';
 import useComponentVisible from '../hooks/useComponentVisible';
 import Profile from '../common/Profile';
-import { searchServices } from '../../api/searchServices';
+import { suggestionsServices } from '../../api/suggestionsServices';
 import { useSelector } from 'react-redux';
 
 const menuItems = [
@@ -58,7 +58,7 @@ function Navbar(props) {
   }
 
   useEffect(() => {
-    searchServices(textSearch)
+    suggestionsServices(textSearch)
       .then((data) => textSearch && setDataSearch(data.data.data))
   },[textSearch])
 
@@ -66,14 +66,19 @@ function Navbar(props) {
     setShowProfile(!showProfile)
   }
 
-  const handleClickSearchResult = (name) => {
-    navigate(`/product/${name}`);
+  const handleClickSearchResult = (id) => {
+    navigate(`/product/${id}`);
     setDataSearch([])
+    setIsComponentVisible(false)
   }
 
   const handleClearSearch = () => {
     setDataSearch([])
     setTextSearch('')
+  }
+
+  const goToSearchResult = () => {
+    navigate(`search?name=${textSearch}`)
   }
 
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(true)
@@ -113,32 +118,45 @@ function Navbar(props) {
                 {textSearch? <ClearIcon style={{ cursor: 'pointer'}} onClick={handleClearSearch} /> : <IconSearch />}
               </SearchWrapper>
             </SearchContainer>
-            <div ref={ref}>
-              {isComponentVisible && (
-                <div className="search-result">
-                  {dataSearch && dataSearch.map((item) => (
-                      <div
-                        key={item._id}
-                        onClick={() => handleClickSearchResult(item.name)}
-                        className="search-item"
-                      >
-                        <p>{item.name}</p>
-                      </div>
-                  ))}
+            {textSearch ? (
+                <div ref={ref}>
+                  {isComponentVisible && (
+                    <div className="search-result">
+                      {dataSearch?.map((item) => (
+                          <div
+                            key={item._id}
+                            onClick={() => handleClickSearchResult(item._id)}
+                            className="search-item"
+                          >
+                            <div className="img">
+                              <img src={item.imageUrl} alt={item.name} />
+                            </div>
+                            <div className="content">
+                              <p>{item.name}</p>
+                              <p> {Number(item.price).toLocaleString('en-US')}đ</p>
+                            </div>
+                          </div>
+                      ))}
+                      {dataSearch ? (
+                        <div className="more">
+                          <p className="more-btn" onClick={goToSearchResult}>Xem thêm ...</p>
+                        </div>
+                      ): null}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+            ): null}
             <IconContainer>
                 <IconItems>
                   <Link to='/wishlist'>
-                    <Badge badgeContent={ numberWishList } color="secondary">
+                    <Badge overlap="rectangular" badgeContent={ numberWishList } color="secondary">
                       <FavoriteBorderSharpIcon />
                     </Badge>
                   </Link>
                 </IconItems>
                 <IconItems>
                   <Link to='cart'>
-                    <Badge badgeContent={ numberCart } color="secondary">
+                    <Badge overlap="rectangular" badgeContent={ numberCart } color="secondary">
                       <ShoppingCartSharpIcon />
                     </Badge>
                   </Link>
@@ -147,9 +165,18 @@ function Navbar(props) {
                   <AccountCircleOutlinedIcon />
                   { showProfile &&  <Triangle /> }
                 </IconItems>
-                <div>
-                  { showProfile &&  <Profile /> }
-                </div>
+                <Modal
+                  open={showProfile}
+                  onClose={() => {setShowProfile(false)}}
+                  BackdropProps={{
+                    style:{backgroundColor: 'transparent'}
+                  }}
+
+                >
+                  <>
+                   <Profile /> 
+                  </>
+                </Modal>
             </IconContainer>
         </Right>
       </NavbarInnerContainer>
@@ -185,7 +212,7 @@ function Navbar(props) {
   top: 0;
   background-color: #28a8e9;
   border-bottom: 1px solid #ccc;
-  z-index: 100;
+  z-index: 1001;
   width: 100%;
   display: flex;
   flex-direction: column;

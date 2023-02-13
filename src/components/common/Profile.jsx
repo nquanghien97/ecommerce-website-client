@@ -48,6 +48,7 @@ const Container = styled.div`
   padding: 16px;
   top: 52px;
   right: 0px;
+  z-index: 10001;
 `
 
 const WrapperMobile = styled.div`
