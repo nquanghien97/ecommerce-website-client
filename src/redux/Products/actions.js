@@ -1,8 +1,7 @@
 import { getAllProducts } from "../../api/productServices";
 import { getClothes, getShoes } from "../../api/categoryServices";
+import { addCartServices } from "../../api/cartServices";
 
-export const INCREASE_QUANTITY = 'INCREASE_QUANTITY';
-export const DECREASE_QUANTITY = 'DECREASE_QUANTITY';
 export const GET_ALL_PRODUCT = 'GET_ALL_PRODUCT';
 export const GET_NUMBER_CART = 'GET_NUMBER_CART';
 export const ADD_CART = 'ADD_CART' ;
@@ -111,12 +110,21 @@ export function GetNumberCart(){
   }
 }
  
-export function AddCart(payload){
-  return {
-    type:'ADD_CART',
-    payload
+export const AddCart = (productId, price, userId) => {
+  return async (dispatch) => {
+    // dispatch(loading())
+    try {
+      const res = await addCartServices(productId, price, userId)
+      dispatch({
+        type: ADD_CART,
+        payload: res.data.products
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
+
 export function UpdateCart(payload){
   return {
     type:'UPDATE_CART',
@@ -126,19 +134,6 @@ export function UpdateCart(payload){
 export function DeleteCart(payload){
   return{
     type:'DELETE_CART',
-    payload
-  }
-}
- 
-export function IncreaseQuantity(payload){
-  return{
-    type:'INCREASE_QUANTITY',
-    payload
-  }
-}
-export function DecreaseQuantity(payload){
-  return{
-    type:'DECREASE_QUANTITY',
     payload
   }
 }

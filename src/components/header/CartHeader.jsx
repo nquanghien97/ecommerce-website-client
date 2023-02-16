@@ -1,20 +1,16 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@material-ui/icons/Search';
-import ShoppingCartSharpIcon from '@material-ui/icons/ShoppingCartSharp';
 import CloseIcon from '@material-ui/icons/Close';
 import ClearIcon from '@material-ui/icons/Clear';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-import FavoriteBorderSharpIcon from '@material-ui/icons/FavoriteBorderSharp';
-import { Badge, Modal } from '@material-ui/core';
+import { Modal } from '@material-ui/core';
 import { mobile } from '../../responsive';
 import { Link, useNavigate } from 'react-router-dom';
 import useComponentVisible from '../hooks/useComponentVisible';
 import Profile from '../common/Profile';
 import { suggestionsServices } from '../../api/suggestionsServices';
-import { getCartServices } from '../../api/cartServices'
-import { useSelector } from 'react-redux';
 
 const menuItems = [
   {
@@ -39,7 +35,7 @@ const menuItems = [
   }
 ]
 
-function Navbar() {
+function CartHeader() {
 
   const [extendNavbar, setExtendNavbar] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -49,11 +45,6 @@ function Navbar() {
   const [textSearch, setTextSearch] = useState('')
 
   const [dataSearch, setDataSearch] = useState();
-  const [listCart, setListCart] = useState([]);
-
-  const numberCart = useSelector((state => state._todoProduct.numberCart));
-  const numberWishList = useSelector((state => state._todoProduct.numberWishList));
-  const userId = useSelector((state => state.user?.user?.userId))
 
   const onChangeSearch = (e) => {
     setTextSearch(e.target.value);
@@ -63,12 +54,7 @@ function Navbar() {
   useEffect(() => {
     suggestionsServices(textSearch)
       .then((data) => textSearch && setDataSearch(data.data.data))
-    const fetchCart = async () => {
-        const res = await getCartServices(userId)
-        setListCart(res.data?.data?.products)
-      }
-    fetchCart()
-  },[textSearch, userId])
+  },[textSearch])
 
   const onShowProfile = (e) => {
     setShowProfile(!showProfile)
@@ -94,8 +80,6 @@ function Navbar() {
   useEffect(() => {
     setIsComponentVisible(false)
   },[setIsComponentVisible])
-
-  const initNumberCart = listCart?.reduce((acc, cur) => acc + cur.quantity,0) || 0
 
   return (
     <NavbarContainer>
@@ -130,64 +114,50 @@ function Navbar() {
               </SearchWrapper>
             </SearchContainer>
             {textSearch ? (
-                <div ref={ref}>
-                  {isComponentVisible && (
-                    <div className="search-result">
-                      {dataSearch?.map((item) => (
-                          <div
-                            key={item._id}
-                            onClick={() => handleClickSearchResult(item._id)}
-                            className="search-item"
-                          >
-                            <div className="img">
-                              <img src={item.imageUrl} alt={item.name} />
-                            </div>
-                            <div className="content">
-                              <p>{item.name}</p>
-                              <p> {Number(item.price).toLocaleString('en-US')}đ</p>
-                            </div>
-                          </div>
-                      ))}
-                      {dataSearch.length ? (
-                        <div className="more">
-                          <p className="more-btn" onClick={goToSearchResult}>Xem thêm ...</p>
+              <div ref={ref}>
+                {isComponentVisible && (
+                  <div className="search-result">
+                    {dataSearch?.map((item) => (
+                      <div
+                        key={item._id}
+                        onClick={() => handleClickSearchResult(item._id)}
+                        className="search-item"
+                      >
+                        <div className="img">
+                          <img src={item.imageUrl} alt={item.name} />
                         </div>
-                      ): null}
-                    </div>
-                  )}
-                </div>
+                        <div className="content">
+                          <p>{item.name}</p>
+                          <p> {Number(item.price).toLocaleString('en-US')}đ</p>
+                        </div>
+                      </div>
+                    ))}
+                    {dataSearch.length ? (
+                      <div className="more">
+                        <p className="more-btn" onClick={goToSearchResult}>Xem thêm ...</p>
+                      </div>
+                    ): null}
+                  </div>
+                )}
+              </div>
             ): null}
             <IconContainer>
-                <IconItems>
-                  <Link to='/wishlist'>
-                    <Badge overlap="rectangular" badgeContent={ numberWishList } color="secondary">
-                      <FavoriteBorderSharpIcon />
-                    </Badge>
-                  </Link>
-                </IconItems>
-                <IconItems>
-                  <Link to='cart'>
-                    <Badge overlap="rectangular" badgeContent={ numberCart+ initNumberCart } color="secondary">
-                      <ShoppingCartSharpIcon />
-                    </Badge>
-                  </Link>
-                </IconItems>
-                <IconItems onClick={onShowProfile}>
-                  <AccountCircleOutlinedIcon />
-                  { showProfile &&  <Triangle /> }
-                </IconItems>
-                <Modal
-                  open={showProfile}
-                  onClose={() => {setShowProfile(false)}}
-                  BackdropProps={{
-                    style:{backgroundColor: 'transparent'}
-                  }}
-                >
-                  <>
-                   <Profile /> 
-                  </>
-                </Modal>
-            </IconContainer>
+              <IconItems onClick={onShowProfile}>
+                <AccountCircleOutlinedIcon />
+                { showProfile &&  <Triangle /> }
+              </IconItems>
+              <Modal
+                open={showProfile}
+                onClose={() => {setShowProfile(false)}}
+                BackdropProps={{
+                  style:{backgroundColor: 'transparent'}
+                }}
+              >
+                <>
+                  <Profile /> 
+                </>
+              </Modal>
+          </IconContainer>
         </Right>
       </NavbarInnerContainer>
         <NavbarExtendedContainer show={extendNavbar}>
@@ -424,4 +394,4 @@ const Bottom = styled.div`
 `
 
 
-export default Navbar
+export default CartHeader

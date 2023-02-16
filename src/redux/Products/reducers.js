@@ -2,8 +2,6 @@ import {
   GET_ALL_PRODUCT,
   GET_NUMBER_CART,
   ADD_CART,
-  DECREASE_QUANTITY,
-  INCREASE_QUANTITY,
   DELETE_CART,
   GET_ALL_CLOTHES,
   GET_ALL_SHOES,
@@ -60,13 +58,14 @@ export default function todoProduct(state = initProduct, action){
                 }
         case ADD_CART:
             if(state.numberCart===0){
-                let cart = {
-                    _id:action.payload._id,
-                    quantity:1,
-                    name:action.payload.name,
-                    imageUrl:action.payload.imageUrl,
-                    price:action.payload.price
-                }
+                // let cart = {
+                //     _id:action.payload._id,
+                //     quantity:1,
+                //     name:action.payload.name,
+                //     imageUrl:action.payload.imageUrl,
+                //     price:action.payload.price
+                // }
+                let cart = action.payload
                 state.Carts.push(cart);
             }
             else{
@@ -92,23 +91,6 @@ export default function todoProduct(state = initProduct, action){
                 ...state,
                 numberCart:state.numberCart+1
             }
-            case INCREASE_QUANTITY:
-                state.numberCart++
-                state.Carts[action.payload].quantity++;
-               
-               return{
-                   ...state
-               }
-            case DECREASE_QUANTITY:
-                let quantity = state.Carts[action.payload].quantity;
-                if(quantity>1){
-                    state.numberCart--;
-                    state.Carts[action.payload].quantity--;
-                }
-               
-                return{
-                    ...state
-                }
             case DELETE_CART:
                 let quantity_ = state.Carts[action.payload].quantity;
                 return{

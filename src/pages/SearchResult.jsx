@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import {actFetchProductsRequest, AddWishList} from '../redux/Products/actions';
+import { AddWishList} from '../redux/Products/actions';
 import { mobile } from '../responsive';
 import {  useDispatch } from 'react-redux';
 import { searchServices } from '../api/searchServices';

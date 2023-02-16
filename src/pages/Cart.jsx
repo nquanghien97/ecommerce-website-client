@@ -1,61 +1,135 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
 import ClearIcon from '@material-ui/icons/Clear';
-import { IncreaseQuantity, DecreaseQuantity, DeleteCart } from '../redux/Products/actions';
 import { mobile } from '../responsive';
-import { useSelector, useDispatch} from 'react-redux';
+import { useSelector } from 'react-redux';
+import { TextField } from '@material-ui/core';
+import { getCartServices, updateCartServices, deleteCartServices } from '../api/cartServices';
+import CartHeader from '../components/header/CartHeader';
 
 function Cart() {
 
-  const dispatch = useDispatch();
+  const userId = useSelector(state => state.user?.user?.userId) || '';
 
-  const items = useSelector(state => state._todoProduct)
+  const [listCart, setListCart] = useState([])
+  const [newCart, setNewCart] = useState([]);
+  const [listCartRemaining, setListCartRemaining] = useState()
 
-  const increaseQuantity = (index) => dispatch(IncreaseQuantity(index))
+  const handleChangeQuantity = (e, id) => {
+    setNewCart([
+      ...newCart,
+      {
+      productId: id,
+      quantity: e.target.value,
+      }
+    ]
+    )
+  }
+  const result = newCart.reduce((acc, cur) => {
+    const productId = cur.productId;
+    const quantity = cur.quantity;
+    acc[productId] = quantity || 1;
+    return acc;
+  }, {});
+  
+  for(let i = 0; i < listCart.products?.length; i++) {
+    if (Object.keys(result).includes(listCart.products[i].productId._id)) {
+      listCart.products[i].quantity = +result[listCart.products[i].productId._id]
+      const subTotal = listCart.products.map(item => item.quantity * item.price).reduce((sum, item) => sum + item)
+      listCart.subTotal = subTotal
+    }
+  }
+  
+  useEffect(() => {
+    //getCart
+    const getCart = async () => {
+      const res = await getCartServices(userId)
+      setListCart(res.data?.data)
+    }
+    getCart();
 
-  const decreaseQuantity = (index) => dispatch(DecreaseQuantity(index))
+    //updateCart
+    const result = newCart.reduce((acc, cur) => {
+      const productId = cur.productId;
+      const quantity = cur.quantity;
+      acc[productId] = quantity || 1;
+      return acc;
+    }, {});
+  
+    const products = Object.keys(result).map(key => ({
+      productId: key,
+      quantity: result[key]
+    })); 
+    const dataUpdate = {
+      userId,
+      products
+    }
+    const updateCart = async () => {
+      await updateCartServices(dataUpdate)
+    }
+    updateCart()
+  },[newCart, userId]);
 
-  const deleteCart = (index) => dispatch(DeleteCart(index))
+  const deleteCart = async (productId) => {
+    try {
+      await deleteCartServices(userId, productId)
+      const newData = listCart.products?.filter((item) => {
+        return item.productId._id !== productId
+      })
+      setListCartRemaining(newData)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
-  let ListCart = [];
-  let TotalCart = 0;
-  Object.keys(items.Carts).forEach(function(item){
-    TotalCart+=items.Carts[item].quantity * items.Carts[item].price;
-    ListCart.push(items.Carts[item]);
-  });
+  if(listCartRemaining) {
+    listCart.products = listCartRemaining
+    // listCart.subTotal = listCartRemaining.reduce((acc, cur) => acc + cur.total, 0)
+  }
 
+  // console.log('listCartRemaining',listCartRemaining)
+  // console.log('listCart',listCart)
+  
   return (
+    <>
+    <CartHeader />
     <Container>
       <Left>
         <TextContainer>
           <Text>Giỏ hàng của bạn</Text>
-          <TotalItem>TỔNG CỘNG ({items.numberCart} sản phẩm): {Number(TotalCart).toLocaleString('en-US')}đ</TotalItem>
+          <TotalItem>TỔNG CỘNG ({listCart.products?.length} sản phẩm): {Number(listCart.subTotal).toLocaleString('en-US')}đ</TotalItem>
         </TextContainer>
         <Content>
-          { ListCart.map((item, index) => {
+          { listCart.products?.map((item, index) => {
             return (
               <Wrapper key={index}>
                 <LeftContent>
-                  <Image src={item.imageUrl} />
+                  <Image src={item.productId.imageUrl} />
                 </LeftContent>
                 <RightContent>
                   <DesWrapper>
                     <Description>
                       <Detail>
-                          <Name>{item.name}</Name>
-                          <Price>{Number(item.price).toLocaleString('en-US')}đ</Price>
+                          <Name>{item.productId.name}</Name>
+                          <Price>{Number(item.productId.price).toLocaleString('en-US')}đ</Price>
                       </Detail>
                       <TextDes>Mặt hàng có sẵn mới nhất</TextDes>
                     </Description>
                     <Action>
-                      <ClearIcon onClick={()=>deleteCart(index)} />
+                      <ClearIcon onClick={()=>deleteCart(item.productId._id)} />
                     </Action>
                   </DesWrapper>
-                  <Amount>
-                    <Span style={{cursor: 'pointer'}} onClick={()=>decreaseQuantity(index)}>-</Span>
-                    <Span>{item.quantity}</Span>
-                    <Span style={{cursor: 'pointer'}} onClick={()=>increaseQuantity(index)}>+</Span>
-                  </Amount>
+                  <div>
+                    <TextField
+                      type="number"
+                      name="quantity"
+                      label="Số lượng"
+                      variant="filled"
+                      onChange={(e)=> handleChangeQuantity(e, item.productId._id)}
+                      InputProps={{ inputProps: { min: 1 } }}
+                      defaultValue={item.quantity}
+                    />
+                  </div>
                 </RightContent>
               </Wrapper>
             )
@@ -66,8 +140,8 @@ function Cart() {
         <OrderContainer>
           <H1>Tóm tắt đơn hàng</H1>
           <Product>
-            <TotalProduct>{items.numberCart} sản phẩm</TotalProduct>
-            <PriceProduct>{Number(TotalCart).toLocaleString('en-US')}đ</PriceProduct>
+            <TotalProduct>{listCart.products?.length} sản phẩm</TotalProduct>
+            <PriceProduct>{Number(listCart.subTotal).toLocaleString('en-US')}đ</PriceProduct>
           </Product>
           <Ship>
             <TextShip>Giao hàng</TextShip>
@@ -75,12 +149,22 @@ function Cart() {
           </Ship>
           <Total>
             <TextTotal>Tổng</TextTotal>
-            <PriceTotal>{Number(TotalCart).toLocaleString('en-US')}đ</PriceTotal>
+            <PriceTotal>{Number(listCart.subTotal).toLocaleString('en-US')}đ</PriceTotal>
           </Total>
         </OrderContainer>
         <Pay>Thanh toán</Pay>
       </Right>
     </Container>
+    <div style={{display: 'flex', justifyContent: 'center', }}>
+      <TextField
+        type="number"
+        label="Số lượng"
+        variant="filled"
+        onChange={handleChangeQuantity}
+        InputProps={{ inputProps: { min: 1 } }}
+      />
+    </div>
+    </>
   )
 }
 
@@ -175,15 +259,6 @@ const Action = styled.div`
   margin-left: 12px;
 `
 
-const Amount = styled.div`
-
-`
-
-const Span = styled.span`
-  font-size: 28px;
-  padding: 12px;
-`
-
 const Text = styled.h1`
 
 `
@@ -259,10 +334,5 @@ const PriceTotal = styled.p`
 
 `
 
-const mapStateToProps = state =>{
-    return{
-        items:state._todoProduct,
-    }
-}
+export default Cart
 
-export default connect(mapStateToProps,{IncreaseQuantity,DecreaseQuantity,DeleteCart})(Cart)

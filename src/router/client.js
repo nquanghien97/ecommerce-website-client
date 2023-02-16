@@ -1,10 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import Home from '../pages/Home'
-import Header from '../pages/Header'
-import Cart from '../pages/Cart'
-import Product from '../pages/Product'
+import Home from '../pages/Home';
+import Header from '../pages/Header';
+import Product from '../pages/Product';
 import SignIn from '../pages/sign-in';
 import SignUp from '../pages/sign-up';
 import WishList from '../pages/wishList';
@@ -21,7 +20,7 @@ function Client() {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/cart' element={<Cart />} />
+        {/* <Route path='/cart' element={<Cart />} /> */}
         <Route path='/product/:id' element={<Product />} />
         <Route path='/sign-in' element={ currentUser ? <Navigate to="/" replace /> : <SignIn />} />
         <Route path='/sign-up' element={ currentUser ? <Navigate to="/" replace /> : <SignUp />} />

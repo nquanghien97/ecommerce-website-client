@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AddCart, AddWishList } from '../redux/Products/actions';
 import { mobile } from '../responsive';
 import { getProduct } from '../api/productServices';
@@ -30,8 +30,8 @@ function Product() {
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const addCart = (item) => {
-    dispatch(AddCart(item))
+  const addCart = (_id, price, userId) => {
+    dispatch(AddCart(_id, price, userId))
   }
 
   const addWishList = (item) => {
@@ -52,6 +52,7 @@ function Product() {
     fetchProduct()
   },[id])
 
+  const userId = useSelector(state => state.user.user.userId);
   if(loading) {
     return (
       <Box className={classes.loading}>
@@ -59,6 +60,8 @@ function Product() {
       </Box>
     )
   }
+
+  const { _id, price} = product
 
   return (
     <Container>
@@ -75,7 +78,7 @@ function Product() {
 
           </Size>
           <AddWrapper>
-            <AddCard onClick={()=> addCart(product)}>
+            <AddCard onClick={()=> addCart(_id, price, userId)}>
               Thêm vào giỏ hàng
             </AddCard>
             <AddWishListWrapper>
