@@ -92,14 +92,10 @@ export default function todoProduct(state = initProduct, action){
                 numberCart:state.numberCart+1
             }
             case DELETE_CART:
-                let quantity_ = state.Carts[action.payload].quantity;
+                let quantity_ = 0
                 return{
                     ...state,
-                    numberCart:state.numberCart - quantity_,
-                    Carts:state.Carts.filter(item=>{
-                        return item._id!==state.Carts[action.payload]._id
-                    })
-                    
+                    numberCart:quantity_
                 }
         case ADD_WISH_LIST:
             if(state.numberWishList===0){

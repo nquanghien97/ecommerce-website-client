@@ -6,8 +6,12 @@ import { useSelector } from 'react-redux';
 import { TextField } from '@material-ui/core';
 import { getCartServices, updateCartServices, deleteCartServices } from '../api/cartServices';
 import CartHeader from '../components/header/CartHeader';
+import { useDispatch } from 'react-redux';
+import { DeleteCart } from '../redux/Products/actions';
 
 function Cart() {
+
+  const dispatch = useDispatch();
 
   const userId = useSelector(state => state.user?.user?.userId) || '';
 
@@ -73,6 +77,7 @@ function Cart() {
   
   const deleteCart = async (data) => {
     try {
+      dispatch(DeleteCart(data))
       await deleteCartServices(userId, data.productId._id)
       const newData = listCart.products?.filter((item) => {
         return item.productId._id !== data.productId._id
@@ -157,15 +162,6 @@ function Cart() {
         <Pay>Thanh toán</Pay>
       </Right>
     </Container>
-    <div style={{display: 'flex', justifyContent: 'center', }}>
-      <TextField
-        type="number"
-        label="Số lượng"
-        variant="filled"
-        onChange={handleChangeQuantity}
-        InputProps={{ inputProps: { min: 1 } }}
-      />
-    </div>
     </>
   )
 }

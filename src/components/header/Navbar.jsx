@@ -96,7 +96,6 @@ function Navbar() {
   },[setIsComponentVisible])
 
   const initNumberCart = listCart?.reduce((acc, cur) => acc + cur.quantity,0) || 0
-
   return (
     <NavbarContainer>
       <NavbarInnerContainer>
