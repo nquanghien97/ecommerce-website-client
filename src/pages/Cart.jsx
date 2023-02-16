@@ -13,31 +13,18 @@ function Cart() {
 
   const [listCart, setListCart] = useState([])
   const [newCart, setNewCart] = useState([]);
-  const [listCartRemaining, setListCartRemaining] = useState()
+  const [listCartRemaining, setListCartRemaining] = useState();
+  const [subTotal, setSubTotal] = useState()
 
-  const handleChangeQuantity = (e, id) => {
+  const handleChangeQuantity = (e, item) => {
     setNewCart([
       ...newCart,
       {
-      productId: id,
+      productId: item.productId._id,
       quantity: e.target.value,
       }
     ]
     )
-  }
-  const result = newCart.reduce((acc, cur) => {
-    const productId = cur.productId;
-    const quantity = cur.quantity;
-    acc[productId] = quantity || 1;
-    return acc;
-  }, {});
-  
-  for(let i = 0; i < listCart.products?.length; i++) {
-    if (Object.keys(result).includes(listCart.products[i].productId._id)) {
-      listCart.products[i].quantity = +result[listCart.products[i].productId._id]
-      const subTotal = listCart.products.map(item => item.quantity * item.price).reduce((sum, item) => sum + item)
-      listCart.subTotal = subTotal
-    }
   }
   
   useEffect(() => {
@@ -70,25 +57,40 @@ function Cart() {
     updateCart()
   },[newCart, userId]);
 
-  const deleteCart = async (productId) => {
+  const result = newCart.reduce((acc, cur) => {
+    const productId = cur.productId;
+    const quantity = cur.quantity;
+    acc[productId] = quantity || 1;
+    return acc;
+  }, {});
+  for(let i = 0; i < listCart.products?.length; i++) {
+    if (Object.keys(result).includes(listCart.products[i].productId._id)) {
+      listCart.products[i].quantity = +result[listCart.products[i].productId._id]
+      const subTotal = listCart.products.map(item => item.quantity * item.price).reduce((sum, item) => sum + item)
+      listCart.subTotal = subTotal
+    }
+  }
+  
+  const deleteCart = async (data) => {
     try {
-      await deleteCartServices(userId, productId)
+      await deleteCartServices(userId, data.productId._id)
       const newData = listCart.products?.filter((item) => {
-        return item.productId._id !== productId
+        return item.productId._id !== data.productId._id
       })
+      const subTotalRemaning = listCart.subTotal - data.quantity*data.price
+      setSubTotal(subTotalRemaning)
+      console.log(listCart)
       setListCartRemaining(newData)
     } catch (err) {
       console.log(err)
     }
   }
-
   if(listCartRemaining) {
     listCart.products = listCartRemaining
-    // listCart.subTotal = listCartRemaining.reduce((acc, cur) => acc + cur.total, 0)
+  } 
+  if(subTotal){
+    listCart.subTotal = subTotal
   }
-
-  // console.log('listCartRemaining',listCartRemaining)
-  // console.log('listCart',listCart)
   
   return (
     <>
@@ -116,7 +118,7 @@ function Cart() {
                       <TextDes>Mặt hàng có sẵn mới nhất</TextDes>
                     </Description>
                     <Action>
-                      <ClearIcon onClick={()=>deleteCart(item.productId._id)} />
+                      <ClearIcon onClick={()=>deleteCart(item)} />
                     </Action>
                   </DesWrapper>
                   <div>
@@ -125,7 +127,7 @@ function Cart() {
                       name="quantity"
                       label="Số lượng"
                       variant="filled"
-                      onChange={(e)=> handleChangeQuantity(e, item.productId._id)}
+                      onChange={(e)=> handleChangeQuantity(e, item)}
                       InputProps={{ inputProps: { min: 1 } }}
                       defaultValue={item.quantity}
                     />
@@ -140,8 +142,8 @@ function Cart() {
         <OrderContainer>
           <H1>Tóm tắt đơn hàng</H1>
           <Product>
-            <TotalProduct>{listCart.products?.length} sản phẩm</TotalProduct>
-            <PriceProduct>{Number(listCart.subTotal).toLocaleString('en-US')}đ</PriceProduct>
+            <TotalProduct>{listCart.products?.length || 0} sản phẩm</TotalProduct>
+            <PriceProduct>{Number(listCart.subTotal).toLocaleString('en-US') || 0}đ</PriceProduct>
           </Product>
           <Ship>
             <TextShip>Giao hàng</TextShip>
@@ -149,7 +151,7 @@ function Cart() {
           </Ship>
           <Total>
             <TextTotal>Tổng</TextTotal>
-            <PriceTotal>{Number(listCart.subTotal).toLocaleString('en-US')}đ</PriceTotal>
+            <PriceTotal>{Number(listCart.subTotal).toLocaleString('en-US') || 0}đ</PriceTotal>
           </Total>
         </OrderContainer>
         <Pay>Thanh toán</Pay>
