@@ -1,12 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import {actFetchProductsRequest, AddWishList} from '../redux/Products/actions';
+import { AddWishList} from '../redux/Products/actions';
+import { paginationServices } from '../api/pagination'
 import { mobile } from '../responsive';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Box, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Pagination from '@material-ui/lab/Pagination';
 
 const useStyles = makeStyles({
   loading: {
@@ -24,6 +26,10 @@ function AllProducts() {
 
   const navigate = useNavigate();
 
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1)
+
   const goToProduct = (id) => {
     navigate(`/product/${id}`)
   }
@@ -32,15 +38,25 @@ function AllProducts() {
 
   const addWishList = (items) => {
     dispatch(AddWishList(items));
-  } 
+  }
+
+  const handleChangePagination = (e, numberPage) => {
+    setPage(numberPage)
+  }
 
   useEffect(() => {
-    const fetchProducts = () =>dispatch(actFetchProductsRequest())
-    fetchProducts()
-  }, [dispatch])
-
-  const data = useSelector((state) => state._todoProduct._products?.product)
-  const loading = useSelector((state) => state._todoProduct.loading)
+    setLoading(true);
+    try{
+      const fetchProducts = async () => {
+        const res = await paginationServices(page, 8)
+        setData(res.data)
+        setLoading(false);
+      }
+      fetchProducts()
+    }catch (err) {
+      console.log(err);
+    }
+  }, [page])
 
   if(loading) {
     return (
@@ -55,7 +71,7 @@ function AllProducts() {
       <Wrapper>
         <Title>All Products</Title>
         <Content>
-          {data?.map((item) => (
+          {data.product?.map((item) => (
             <ProductContainer
               key={item._id}
               onClick={() => goToProduct(item._id)}
@@ -83,6 +99,14 @@ function AllProducts() {
           ))}
         </Content>
       </Wrapper>
+      <PaginationWrapper>
+        <Pagination
+          onChange={handleChangePagination}
+          page={page}
+          count={data?.totalPages}
+          color="primary"
+        />
+        </PaginationWrapper>
     </Container>
   )
 }
@@ -92,6 +116,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   ${mobile({
     marginTop: '117px',
   })}
@@ -164,6 +189,13 @@ const Description = styled.div`
 
 const Status = styled.div`
 
+`
+
+const PaginationWrapper = styled.div`
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 export default AllProducts
