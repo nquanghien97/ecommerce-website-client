@@ -276,7 +276,7 @@ function Navbar() {
 `;
 
 const CenterContainer = styled.div`
-  flex: 70%;
+  flex: 60%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -297,7 +297,8 @@ const Logo = styled.img`
 `;
 
 const MenuItem = styled.div`
-
+  display: flex;
+  align-items: center;
 `
 
 const OpenLinksButton = styled.button`

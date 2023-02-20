@@ -1,6 +1,6 @@
 # *ECOMMERCE-WEBSITE using Reactjs*
 
-## > Features
+## Features
 
 - Display products fetched from API
 - Add, delete products in the Cart

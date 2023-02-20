@@ -2,6 +2,7 @@ import {
   GET_ALL_PRODUCT,
   GET_NUMBER_CART,
   ADD_CART,
+  UPDATE_CART,
   DELETE_CART,
   GET_ALL_CLOTHES,
   GET_ALL_SHOES,
@@ -135,6 +136,12 @@ export default function todoProduct(state = initProduct, action){
             return{
                 ...state
             }
+        case UPDATE_CART: {
+            return {
+                ...state,
+                numberCart: action.payload
+            }
+        }
         default:
             return state;
     }

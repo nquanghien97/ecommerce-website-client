@@ -7,7 +7,7 @@ import UpdateProduct from '../components/dashboard/allProducts/updateProduct';
 import UpdateProductTrending from '../components/dashboard/trending/updateProduct';
 import AddProduct from '../components/dashboard/allProducts/addProduct';
 import AddTrendingProduct from '../components/dashboard/trending/addProduct';
-
+import NotFound from '../pages/NotFound';
 
 
 function App() {
@@ -23,6 +23,7 @@ function App() {
         <Route path='/trending/:id' element={<UpdateProductTrending />}/>
         <Route path='/allproducts/createproduct' element={<AddProduct />}/>
         <Route path='/trending/createtrendingproduct' element={<AddTrendingProduct />}/>
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   )

@@ -3,7 +3,7 @@ import './App.css';
 import DashBoard from './router/dashboard';
 import Client from './router/client';
 import { useSelector } from 'react-redux';
-import Cart from './pages/Cart'
+import Cart from './pages/Cart';
 
 function App() {
 

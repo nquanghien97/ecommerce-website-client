@@ -56,7 +56,11 @@ function Cart() {
       products
     }
     const updateCart = async () => {
-      await updateCartServices(dataUpdate)
+      try{
+        await updateCartServices(dataUpdate)
+      } catch (err) {
+        console.log(err.message)
+      }
     }
     updateCart()
   },[newCart, userId]);
@@ -67,7 +71,7 @@ function Cart() {
     acc[productId] = quantity || 1;
     return acc;
   }, {});
-  for(let i = 0; i < listCart.products?.length; i++) {
+  for(let i = 0; i < listCart?.products?.length; i++) {
     if (Object.keys(result).includes(listCart.products[i].productId._id)) {
       listCart.products[i].quantity = +result[listCart.products[i].productId._id]
       const subTotal = listCart.products.map(item => item.quantity * item.price).reduce((sum, item) => sum + item)
@@ -96,6 +100,10 @@ function Cart() {
   if(subTotal){
     listCart.subTotal = subTotal
   }
+
+  if(listCart?.products?.length === 0) {
+    listCart.subTotal = 0
+  }
   
   return (
     <>
@@ -104,10 +112,10 @@ function Cart() {
       <Left>
         <TextContainer>
           <Text>Giỏ hàng của bạn</Text>
-          <TotalItem>TỔNG CỘNG ({listCart.products?.length} sản phẩm): {Number(listCart.subTotal).toLocaleString('en-US')}đ</TotalItem>
+          <TotalItem>TỔNG CỘNG ({listCart?.products?.length} sản phẩm): {Number(listCart?.subTotal).toLocaleString('en-US')}đ</TotalItem>
         </TextContainer>
         <Content>
-          { listCart.products?.map((item, index) => {
+          { listCart?.products?.map((item, index) => {
             return (
               <Wrapper key={index}>
                 <LeftContent>
@@ -147,8 +155,8 @@ function Cart() {
         <OrderContainer>
           <H1>Tóm tắt đơn hàng</H1>
           <Product>
-            <TotalProduct>{listCart.products?.length || 0} sản phẩm</TotalProduct>
-            <PriceProduct>{Number(listCart.subTotal).toLocaleString('en-US') || 0}đ</PriceProduct>
+            <TotalProduct>{listCart?.products?.length || 0} sản phẩm</TotalProduct>
+            <PriceProduct>{Number(listCart?.subTotal).toLocaleString('en-US') || 0}đ</PriceProduct>
           </Product>
           <Ship>
             <TextShip>Giao hàng</TextShip>
@@ -156,7 +164,7 @@ function Cart() {
           </Ship>
           <Total>
             <TextTotal>Tổng</TextTotal>
-            <PriceTotal>{Number(listCart.subTotal).toLocaleString('en-US') || 0}đ</PriceTotal>
+            <PriceTotal>{Number(listCart?.subTotal).toLocaleString('en-US') || 0}đ</PriceTotal>
           </Total>
         </OrderContainer>
         <Pay>Thanh toán</Pay>
