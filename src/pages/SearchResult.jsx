@@ -27,7 +27,6 @@ function SearchResult() {
   const { search } = useLocation();
   
   const textSearch = search.substring(6, search.length)
-  console.log(textSearch)
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);

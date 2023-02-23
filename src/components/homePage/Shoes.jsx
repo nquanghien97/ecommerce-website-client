@@ -2,12 +2,13 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import Carousel from "react-multi-carousel";
 import { Link } from "react-router-dom";
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import "react-multi-carousel/lib/styles.css";
 import { mobile } from '../../responsive';
 import { actFetchShoesRequest, AddWishList } from '../../redux/Products/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { CircularProgress } from '@material-ui/core';
+import { getWishList } from '../../redux/Products/actions';
+import WishListIcon from '../common/WishListIcon';
 
 function Shoes() {
 
@@ -31,18 +32,18 @@ function Shoes() {
   };
 
   const dispatch = useDispatch()
-
-  const addWishList = (items) => {
-    dispatch(AddWishList(items));
-  } 
+  
+  const userId = useSelector(state => state.user?.user?.userId) || '';
 
   useEffect(() => {
     const fetchShoes = () =>dispatch(actFetchShoesRequest())
     fetchShoes()
-  }, [dispatch])
+    dispatch(getWishList(userId))
+  }, [dispatch, userId])
 
   const data = useSelector((state) => state._todoProduct._shoes?.product)
   const loading = useSelector((state) => state._todoProduct.loading)
+  const WishList = useSelector((state) => state._todoProduct.WishList)
 
   return(
     <Container>
@@ -76,7 +77,7 @@ function Shoes() {
                       </Slide>
                     </Link>
                     <Icon>
-                      <FavoriteBorderIcon className='icon' onClick={()=> addWishList(item)} />
+                      <WishListIcon item={item} liked={WishList.filter(like => like._id === item._id).length > 0 ? true : false} />
                     </Icon>
                   </div>
                 ))}

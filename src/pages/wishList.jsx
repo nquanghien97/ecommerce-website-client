@@ -1,40 +1,64 @@
+import { useEffect, useState } from 'react';
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
 import { AddCart, AddWishList } from '../redux/Products/actions';
 import { mobile } from '../responsive';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { useSelector, useDispatch } from "react-redux";
+import { getWishList } from '../redux/Products/actions';
+import { getWishListServices } from '../api/wishListServices';
 
 function WishList() {
 
   const dispatch = useDispatch();
 
-  const addWishList = (item) => dispatch(AddWishList(item))
+  const [data, setData] = useState();
+
   const addCart = (item) => dispatch(AddCart(item))
-
-  const WishList = useSelector((state) => state._todoProduct.WishList)
+  const userId = useSelector(state => state.user?.user?.userId) || '';
+  
   const numberWishList = useSelector((state) => state._todoProduct.numberWishList)
+  
+  useEffect(() => {
+    dispatch(getWishList(userId))
+    try {
+      const fetchWishList = async () => {
+        const res = await getWishListServices(userId)
+        setData(res.data.data.wishLists)
+      }
+      fetchWishList()
+    } catch(err) {
+      console.log(err)
+    }
+  },[dispatch, userId])
 
-  console.log(WishList)
+  const addWishList = (productId) => {
+    const wishListRemaning = data.filter(item => item.productId._id !== productId)
+    setData(wishListRemaning)
+    dispatch(AddWishList(userId, productId))
+  }
+
+  console.log(data)
+  
   return (
     <Container>
       <H1>MY WISHLISH</H1>
       <NumberItems>{numberWishList} items</NumberItems>
       <Wrapper>
-        {WishList.map((item, index) => (
+        {data?.map((item, index) => (
             <ItemContainer key={index}>
-              <Link to={`/product/${item._id}`}>
+              <Link to={`/product/${item.productId._id}`}>
                 <Content>
-                  <Image src={item.imageUrl} />
-                  <Price>{Number(item.price).toLocaleString('en-US')}đ</Price>
-                  <Name>{item.name}</Name>
+                  <Image src={item.productId.imageUrl} alt={item.productId.name} />
+                  <Price>{Number(item.productId.price).toLocaleString('en-US')}đ</Price>
+                  <Name>{item.productId.name}</Name>
                 </Content>
               </Link>
               <Cart onClick={() => {addCart(WishList[index])}}>
                 Thêm vào giỏ hàng
               </Cart>
               <Icon>
-                <FavoriteBorderIcon className='icon' onClick={()=> addWishList(item)} />
+                <FavoriteBorderIcon className='icon' onClick={()=> addWishList(item.productId._id)} />
               </Icon>
             </ItemContainer>
         ))}

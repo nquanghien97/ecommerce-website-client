@@ -1,6 +1,7 @@
 import { getAllProducts } from "../../api/productServices";
 import { getClothes, getShoes } from "../../api/categoryServices";
 import { addCartServices } from "../../api/cartServices";
+import { addWishListServices, getWishListServices } from "../../api/wishListServices";
 
 export const GET_ALL_PRODUCT = 'GET_ALL_PRODUCT';
 export const GET_NUMBER_CART = 'GET_NUMBER_CART';
@@ -10,6 +11,7 @@ export const DELETE_CART = 'DELETE_CART';
 export const GET_ALL_CLOTHES = 'GET_ALL_CLOTHES';
 export const GET_ALL_SHOES = 'GET_ALL_SHOES';
 export const ADD_WISH_LIST = 'ADD_WISH_LIST';
+export const GET_WISH_LIST = 'GET_WISH_LIST';
 export const GET_NUMBER_WISH_LIST= 'GET_NUMBER_WISH_LIST';
 export const FETCH_PRODUCTS_PENDING = 'FETCH_PRODUCTS_PENDING';
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
@@ -88,14 +90,6 @@ export function GetAllClothes(payload){
   }
 }
 
-//*ADD_WISH_LIST
-export function AddWishList(payload){
-  return{
-    type:'ADD_WISH_LIST',
-    payload
-  }
-}
-
 //*GET_NUMBER_WISH_LIST
 export function GetNumberWishList(){
   return{
@@ -137,5 +131,42 @@ export function DeleteCart(payload){
     payload
   }
 }
+
+//*ADD_WISH_LIST
+export const AddWishList = (userId, productId, item) => {
+  return async (dispatch) => {
+    // dispatch(loading())
+    try {
+      const res = await addWishListServices(userId, productId)
+      dispatch({
+        type: ADD_WISH_LIST,
+        payload: {
+          data: res.data.wishlists,
+          item: item,
+          message: res.data.message,
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
+//* GET_WISH_LIST
+export const getWishList = (userId) => {
+  return async (dispatch) => {
+    try {
+      const res = await getWishListServices(userId)
+      dispatch({
+        type: GET_WISH_LIST,
+        payload: res.data,
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
+
 
 

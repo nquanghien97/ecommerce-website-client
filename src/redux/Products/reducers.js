@@ -9,7 +9,8 @@ import {
   ADD_WISH_LIST,
   GET_NUMBER_WISH_LIST,
   FETCH_PRODUCTS_PENDING,
-  FETCH_PRODUCTS_ERROR
+  FETCH_PRODUCTS_ERROR,
+  GET_WISH_LIST,
 } from  './actions';
  
 const initProduct = {
@@ -58,36 +59,29 @@ export default function todoProduct(state = initProduct, action){
                     ...state
                 }
         case ADD_CART:
-            if(state.numberCart===0){
-                // let cart = {
-                //     _id:action.payload._id,
-                //     quantity:1,
-                //     name:action.payload.name,
-                //     imageUrl:action.payload.imageUrl,
-                //     price:action.payload.price
-                // }
-                let cart = action.payload
-                state.Carts.push(cart);
-            }
-            else{
-                let check = false;
-                state.Carts.forEach((item,key)=>{
-                    if(item._id===action.payload._id){
-                        state.Carts[key].quantity++;
-                        check=true;
-                    }
-                });
-                if(!check){
-                    let _cart = {
-                        _id:action.payload._id,
-                        quantity:1,
-                        name:action.payload.name,
-                        imageUrl:action.payload.imageUrl,
-                        price:action.payload.price
-                    }
-                    state.Carts.push(_cart);
-                }
-            }
+            // if(state.numberCart===0){
+            //     let cart = action.payload
+            //     state.Carts.push(cart);
+            // }
+            // else{
+            //     let check = false;
+            //     state.Carts.forEach((item,key)=>{
+            //         if(item._id===action.payload._id){
+            //             state.Carts[key].quantity++;
+            //             check=true;
+            //         }
+            //     });
+            //     if(!check){
+            //         let _cart = {
+            //             _id:action.payload._id,
+            //             quantity:1,
+            //             name:action.payload.name,
+            //             imageUrl:action.payload.imageUrl,
+            //             price:action.payload.price
+            //         }
+            //         state.Carts.push(_cart);
+            //     }
+            // }
             return{
                 ...state,
                 numberCart:state.numberCart+1
@@ -98,33 +92,32 @@ export default function todoProduct(state = initProduct, action){
                     ...state,
                     numberCart:quantity_
                 }
+        case GET_NUMBER_WISH_LIST:
+            return{
+                ...state,
+            }
+        case GET_WISH_LIST:
+            const newWishList = action.payload.data.wishLists.map(({productId: {...product}}) => product)
+            return {
+                ...state,
+                WishList: newWishList,
+                numberWishList: action.payload.data?.wishLists?.length
+            }
         case ADD_WISH_LIST:
             if(state.numberWishList===0){
-                let wishList = {
-                    _id:action.payload._id,
-                    quantity:1,
-                    name:action.payload.name,
-                    imageUrl:action.payload.imageUrl,
-                    price:action.payload.price
-                }
+                let wishList = action.payload.item;
                 state.WishList.push(wishList);
             }
             else{
                 let check = false;
                 state.WishList.forEach((item,key)=>{
-                    if(item._id===action.payload._id){
+                    if(item._id===action.payload.item._id){
                         state.WishList.splice(key,1);
                         check=true;
                     }
                 });
                 if(!check){
-                    let _wishList = {
-                        _id:action.payload._id,
-                        quantity:1,
-                        name:action.payload.name,
-                        imageUrl:action.payload.imageUrl,
-                        price:action.payload.price
-                    }
+                    let _wishList = action.payload.item
                     state.WishList.push(_wishList);
                 }
             }
@@ -132,10 +125,6 @@ export default function todoProduct(state = initProduct, action){
             ...state,
             numberWishList: state.WishList.length
         }
-        case GET_NUMBER_WISH_LIST:
-            return{
-                ...state
-            }
         case UPDATE_CART: {
             return {
                 ...state,

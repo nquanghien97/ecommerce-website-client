@@ -147,7 +147,7 @@ function Navbar() {
                             </div>
                           </div>
                       ))}
-                      {dataSearch.length ? (
+                      {dataSearch?.length ? (
                         <div className="more">
                           <p className="more-btn" onClick={goToSearchResult}>Xem thêm ...</p>
                         </div>

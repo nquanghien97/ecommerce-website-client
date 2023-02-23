@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import {mobile} from '../../responsive';
 import { actFetchClothesRequest, AddWishList } from '../../redux/Products/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { CircularProgress } from '@material-ui/core';
+import WishListIcon from '../common/WishListIcon';
 
 function Interested() {
   //Slider
@@ -50,16 +50,20 @@ function Interested() {
 
   const dispatch = useDispatch()
 
-  const addWishList = (items) => {
-    dispatch(AddWishList(items));
-  } 
+  const userId = useSelector(state => state.user?.user?.userId) || '';
+  const data = useSelector((state) => state._todoProduct._clothes.product)
+  const loading = useSelector((state) => state._todoProduct.loading)
+  const WishList = useSelector((state) => state._todoProduct.WishList)
+
+
+  const addWishList = (productId) => {
+    dispatch(AddWishList(userId, productId));
+  }
 
   useEffect(() => {
     dispatch(actFetchClothesRequest())
   }, [dispatch])
 
-  const data = useSelector((state) => state._todoProduct._clothes.product)
-  const loading = useSelector((state) => state._todoProduct.loading)
 
   return(
     <Container>
@@ -91,7 +95,7 @@ function Interested() {
                       </Slide>
                     </Link>
                     <Icon>
-                      <FavoriteBorderIcon onClick={()=>addWishList(item)} className='icon' />
+                      <WishListIcon item={item} liked={WishList.filter(like => like._id === item._id).length > 0 ? true : false} />
                     </Icon>
                   </div>
                 ))}
