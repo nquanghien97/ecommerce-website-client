@@ -8,6 +8,7 @@ import { mobile } from '../responsive';
 import { getProduct } from '../api/productServices';
 import { Box, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import WishListIcon from '../components/common/WishListIcon';
 
 const useStyles = makeStyles({
   loading: {
@@ -53,6 +54,8 @@ function Product() {
   },[id])
 
   const userId = useSelector(state => state.user.user.userId);
+  const WishList = useSelector((state) => state._todoProduct.WishList)
+
   if(loading) {
     return (
       <Box className={classes.loading}>
@@ -82,7 +85,8 @@ function Product() {
               Thêm vào giỏ hàng
             </AddCard>
             <AddWishListWrapper>
-              <FavoriteBorderIcon onClick={()=> addWishList(product)} style={{ fontSize:'32px'}} />
+              {/* <FavoriteBorderIcon className='icon' onClick={()=> addWishList(product)} style={{ fontSize:'32px'}} /> */}
+              <WishListIcon item={product} liked={WishList.filter(like => like._id === product._id).length > 0 ? true : false} />
             </AddWishListWrapper>
           </AddWrapper>
         </BuySection>

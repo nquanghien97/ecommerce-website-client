@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import { AddWishList} from '../redux/Products/actions';
 import { paginationServices } from '../api/pagination'
 import { mobile } from '../responsive';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Box, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
+import WishListIcon from '../components/common/WishListIcon';
 
 const useStyles = makeStyles({
   loading: {
@@ -34,11 +33,7 @@ function AllProducts() {
     navigate(`/product/${id}`)
   }
 
-  const dispatch = useDispatch()
-
-  const addWishList = (items) => {
-    dispatch(AddWishList(items));
-  }
+  const WishList = useSelector((state) => state._todoProduct.WishList)
 
   const handleChangePagination = (e, numberPage) => {
     setPage(numberPage)
@@ -81,13 +76,10 @@ function AllProducts() {
                   <Image src={item.imageUrl} alt={item.name} />
                 </ImageWrapper>
                 <Price>{Number(item.price).toLocaleString('en-US')}đ</Price>
-                <Icon>
-                  <FavoriteBorderIcon
-                    className='icon'
-                    onClick={(e) => {
-                      addWishList(item)
-                      e.stopPropagation()
-                    }} />
+                <Icon
+                  onClick={(e) => {e.stopPropagation()}}
+                >
+                  <WishListIcon item={item} liked={WishList.filter(like => like._id === item._id).length > 0 ? true : false} />
                 </Icon>
               </Top>
               <Bottom>

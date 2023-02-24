@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link } from 'react-router-dom';
 import { AddCart, AddWishList } from '../redux/Products/actions';
 import { mobile } from '../responsive';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import { useSelector, useDispatch } from "react-redux";
 import { getWishList } from '../redux/Products/actions';
 import { getWishListServices } from '../api/wishListServices';
@@ -49,10 +49,10 @@ function WishList() {
     }
   },[dispatch, userId])
 
-  const addWishList = (productId) => {
+  const addWishList = (productId, item) => {
     const wishListRemaning = data.filter(item => item.productId._id !== productId)
     setData(wishListRemaning)
-    dispatch(AddWishList(userId, productId))
+    dispatch(AddWishList(userId, productId, item))
   }
 
   if(loading) {
@@ -81,7 +81,7 @@ function WishList() {
                 Thêm vào giỏ hàng
               </Cart>
               <Icon>
-                <FavoriteBorderIcon className='icon' onClick={()=> addWishList(item.productId._id)} />
+                <FavoriteIcon className='icon' onClick={()=> addWishList(item.productId._id, item.productId)} />
               </Icon>
             </ItemContainer>
         ))}

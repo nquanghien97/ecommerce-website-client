@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useLocation, useNavigate } from 'react-router-dom';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import { useDispatch } from 'react-redux';
-import { AddWishList } from '../redux/Products/actions';
+import { useSelector } from 'react-redux';
 import { mobile } from '../responsive';
 import { filterServices } from '../api/filterServices';
 import { Box, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import WishListIcon from '../components/common/WishListIcon';
 
 const useStyles = makeStyles({
   loading: {
@@ -27,17 +26,13 @@ function Product() {
 
   const { pathname } = useLocation();
 
-  const dispatch = useDispatch();
+  const WishList = useSelector((state) => state._todoProduct.WishList)
 
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const goToProduct = (id) => {
     navigate(`/product/${id}`)
-  }
-
-  const addWishList = (item) => {
-    dispatch(AddWishList(item))
   }
 
   useEffect(() => {
@@ -62,10 +57,12 @@ function Product() {
     )
   }
 
+  const filterName = pathname.slice(1, pathname.length)
+
   return (
     <Container>
     <Wrapper>
-      <Title>All Products</Title>
+      <Title>All Products for {filterName}</Title>
       <Content>
         {product?.map((item) => (
           <ProductContainer
@@ -77,13 +74,10 @@ function Product() {
                 <Image src={item.imageUrl} alt={item.name} />
               </ImageWrapper>
               <Price>{Number(item.price).toLocaleString('en-US')}đ</Price>
-              <Icon>
-                <FavoriteBorderIcon
-                  className='icon'
-                  onClick={(e) => {
-                    addWishList(item)
-                    e.stopPropagation()
-                  }} />
+              <Icon
+                onClick={(e) => {e.stopPropagation()}}
+              >
+                <WishListIcon item={item} liked={WishList.filter(like => like._id === item._id).length > 0 ? true : false} />
               </Icon>
             </Top>
             <Bottom>

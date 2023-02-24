@@ -4,7 +4,7 @@ import Carousel from "react-multi-carousel";
 import { Link } from "react-router-dom";
 import "react-multi-carousel/lib/styles.css";
 import { mobile } from '../../responsive';
-import { actFetchShoesRequest, AddWishList } from '../../redux/Products/actions';
+import { actFetchShoesRequest } from '../../redux/Products/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { CircularProgress } from '@material-ui/core';
 import { getWishList } from '../../redux/Products/actions';

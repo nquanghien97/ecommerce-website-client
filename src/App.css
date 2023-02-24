@@ -13,8 +13,12 @@ a {
   color: black;
 }
 
+.icon {
+  color: red
+}
+
 .icon:hover {
-  color: red;
+  opacity: 0.5;
 }
 
 .search-result {
