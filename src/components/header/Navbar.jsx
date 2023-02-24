@@ -52,7 +52,7 @@ function Navbar() {
   const [listCart, setListCart] = useState([]);
 
   const numberCart = useSelector((state => state._todoProduct.numberCart));
-  const numberWishList = useSelector((state => state._todoProduct.numberWishList));
+  let numberWishList = useSelector((state => state._todoProduct.numberWishList));
   const userId = useSelector((state => state.user?.user?.userId))
 
   const onChangeSearch = (e) => {
@@ -96,6 +96,10 @@ function Navbar() {
   },[setIsComponentVisible])
 
   const initNumberCart = listCart?.reduce((acc, cur) => acc + cur.quantity,0) || 0
+
+  if(!userId) {
+    numberWishList = 0
+  }
   return (
     <NavbarContainer>
       <NavbarInnerContainer>

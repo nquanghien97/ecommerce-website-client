@@ -30,12 +30,13 @@ export const register = (username, password, fullName) => (dispatch) => {
 
         dispatch({
           type: REGISTER_FAIL,
+          payload: message
         });
 
-        dispatch({
-          type: SET_MESSAGE,
-          payload: message,
-        });
+        // dispatch({
+        //   type: SET_MESSAGE,
+        //   payload: message,
+        // });
         return Promise.reject();
       }
       )
@@ -55,15 +56,16 @@ export const login = (username, password) => {
       },
       (err) => {
         const message = err.response?.data?.message;
-  
+
         dispatch({
           type: LOGIN_FAIL,
+          payload: message
         });
   
-        dispatch({
-          type: SET_MESSAGE,
-          payload: message,
-        });
+        // dispatch({
+        //   type: SET_MESSAGE,
+        //   payload: message,
+        // });
   
         return Promise.reject();
       }

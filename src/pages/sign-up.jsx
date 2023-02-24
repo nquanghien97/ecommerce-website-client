@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { mobile } from '../responsive';
@@ -11,6 +11,16 @@ function SignUp() {
   const dispatch = useDispatch();
 
   const loading = useSelector((state) => state.user.isLoading)
+  const errorMessage = useSelector(state => state.user.message)
+
+  const [textErr, setTextErr] = useState();
+
+  useEffect(() => {
+    setTextErr(errorMessage)
+    return () => {
+      setTextErr('')
+    }
+  },[errorMessage])
 
   const [input, setInput] = useState({
     fullName: '',
@@ -92,6 +102,11 @@ function SignUp() {
             onChange={handleChange}
           />
         </Wrapper>
+        {textErr ? (
+          <div style={{textAlign: 'center', marginBottom: '16px', color: 'red'}}>
+            <p>{textErr}</p>
+          </div>
+        ) : null}
         <ButtonWrapper>
           <Button>
             {loading ? <CircularProgress style={{marginRight:'8px', width:'20px', height:'20px'}} /> : null}

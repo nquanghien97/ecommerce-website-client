@@ -7,24 +7,41 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { useSelector, useDispatch } from "react-redux";
 import { getWishList } from '../redux/Products/actions';
 import { getWishListServices } from '../api/wishListServices';
+import { Box, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  loading: {
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 
 function WishList() {
 
   const dispatch = useDispatch();
 
-  const [data, setData] = useState();
+  const classes = useStyles()
 
-  const addCart = (item) => dispatch(AddCart(item))
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(false);
+
   const userId = useSelector(state => state.user?.user?.userId) || '';
+  const addCart = (productId, price) => dispatch(AddCart(productId, price, userId))
   
   const numberWishList = useSelector((state) => state._todoProduct.numberWishList)
   
   useEffect(() => {
     dispatch(getWishList(userId))
+    setLoading(true)
     try {
       const fetchWishList = async () => {
         const res = await getWishListServices(userId)
         setData(res.data.data.wishLists)
+        setLoading(false)
       }
       fetchWishList()
     } catch(err) {
@@ -38,7 +55,13 @@ function WishList() {
     dispatch(AddWishList(userId, productId))
   }
 
-  console.log(data)
+  if(loading) {
+    return (
+      <Box className={classes.loading}>
+        <CircularProgress />
+      </Box>
+    )
+  }
   
   return (
     <Container>
@@ -54,7 +77,7 @@ function WishList() {
                   <Name>{item.productId.name}</Name>
                 </Content>
               </Link>
-              <Cart onClick={() => {addCart(WishList[index])}}>
+              <Cart onClick={() => {addCart(item.productId._id, item.productId.price)}}>
                 Thêm vào giỏ hàng
               </Cart>
               <Icon>

@@ -8,8 +8,26 @@ import { getCartServices, updateCartServices, deleteCartServices } from '../api/
 import CartHeader from '../components/header/CartHeader';
 import { useDispatch } from 'react-redux';
 import { DeleteCart } from '../redux/Products/actions';
+import { Box, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  loading: {
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  amount: {
+    display: 'flex',
+    alignItems: 'center',
+  }
+})
 
 function Cart() {
+
+  const classes = useStyles();
 
   const dispatch = useDispatch();
 
@@ -18,7 +36,8 @@ function Cart() {
   const [listCart, setListCart] = useState([])
   const [newCart, setNewCart] = useState([]);
   const [listCartRemaining, setListCartRemaining] = useState();
-  const [subTotal, setSubTotal] = useState()
+  const [subTotal, setSubTotal] = useState();
+  const [loading, setLoading] = useState(false);
 
   const handleChangeQuantity = (e, item) => {
     setNewCart([
@@ -34,8 +53,14 @@ function Cart() {
   useEffect(() => {
     //getCart
     const getCart = async () => {
-      const res = await getCartServices(userId)
-      setListCart(res.data?.data)
+      setLoading(true)
+      try{
+        const res = await getCartServices(userId)
+        setListCart(res.data?.data)
+        setLoading(false)
+      }catch(err) {
+        console.log(err)
+      }
     }
     getCart();
 
@@ -88,7 +113,6 @@ function Cart() {
       })
       const subTotalRemaning = listCart.subTotal - data.quantity*data.price
       setSubTotal(subTotalRemaning)
-      console.log(listCart)
       setListCartRemaining(newData)
     } catch (err) {
       console.log(err)
@@ -104,6 +128,19 @@ function Cart() {
   if(listCart?.products?.length === 0) {
     listCart.subTotal = 0
   }
+
+  if(loading) {
+    return (
+      <>
+      <CartHeader />
+      <Box className={classes.loading}>
+        <CircularProgress />
+      </Box>
+      </>
+    )
+  }
+
+  console.log(loading)
   
   return (
     <>
@@ -134,7 +171,7 @@ function Cart() {
                       <ClearIcon onClick={()=>deleteCart(item)} />
                     </Action>
                   </DesWrapper>
-                  <div>
+                  <Box className={classes.amount}>
                     <TextField
                       type="number"
                       name="quantity"
@@ -144,7 +181,7 @@ function Cart() {
                       InputProps={{ inputProps: { min: 1 } }}
                       defaultValue={item.quantity}
                     />
-                  </div>
+                  </Box>
                 </RightContent>
               </Wrapper>
             )

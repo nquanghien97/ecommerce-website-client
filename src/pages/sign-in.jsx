@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,11 +9,21 @@ import { CircularProgress } from '@material-ui/core';
 function SignIn() {
 
   const dispatch = useDispatch();
-
+  const loading = useSelector((state) => state.user.isLoading)
+  const errorMessage = useSelector(state => state.user.message)
+  
   const [input, setInput] = useState({
     username: '',
     password: '',
   })
+  const [textErr, setTextErr] = useState();
+  
+  useEffect(() => {
+    setTextErr(errorMessage)
+    return () => {
+      setTextErr('')
+    }
+  },[errorMessage])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,8 +35,7 @@ function SignIn() {
         username: '',
         password: '',
       })
-    }
-    catch(err) {
+    }catch(err) {
       console.log(err)
     }
   }
@@ -38,8 +47,6 @@ function SignIn() {
       [name]: value
     })
   }
-  const loading = useSelector((state) => state.user.isLoading)
-  console.log(loading)
 
   return (
     <Container>
@@ -62,6 +69,11 @@ function SignIn() {
             onChange={handleChange}
           />
         </Wrapper>
+        {textErr ? (
+          <div style={{textAlign: 'center', marginBottom: '16px', color: 'red'}}>
+            <p>{textErr}</p>
+          </div>
+        ) : null}
         <ButtonWrapper>
           <Button type="submit">
             {loading ? <CircularProgress style={{marginRight:'8px', width:'20px', height:'20px'}} /> : null}
