@@ -15,29 +15,7 @@ import Profile from '../common/Profile';
 import { suggestionsServices } from '../../api/suggestionsServices';
 import { getCartServices } from '../../api/cartServices'
 import { useSelector } from 'react-redux';
-
-const menuItems = [
-  {
-    title: "Nam",
-    path: "male"
-  },
-  {
-    title: "Nữ",
-    path: "female"
-  },
-  {
-    title: "Trẻ em",
-    path: "allproducts"
-  },
-  {
-    title: "Thể thao",
-    path: "allproducts"
-  },
-  {
-    title: "Các nhãn hiệu",
-    path: "allproducts"
-  }
-]
+import menuItems from '../../config/menuItemNavbar';
 
 function Navbar() {
 
