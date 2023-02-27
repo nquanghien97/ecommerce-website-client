@@ -7,7 +7,6 @@ import { mobile } from '../../responsive';
 import { actFetchShoesRequest } from '../../redux/Products/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { CircularProgress } from '@material-ui/core';
-import { getWishList } from '../../redux/Products/actions';
 import WishListIcon from '../common/WishListIcon';
 
 function Shoes() {
@@ -32,14 +31,11 @@ function Shoes() {
   };
 
   const dispatch = useDispatch()
-  
-  const userId = useSelector(state => state.user?.user?.userId) || '';
 
   useEffect(() => {
     const fetchShoes = () =>dispatch(actFetchShoesRequest())
     fetchShoes()
-    dispatch(getWishList(userId))
-  }, [dispatch, userId])
+  }, [dispatch])
 
   const data = useSelector((state) => state._todoProduct._shoes?.product)
   const loading = useSelector((state) => state._todoProduct.loading)
@@ -130,7 +126,7 @@ const Slide = styled.div`
 
 const Img = styled.img`
   width: 100%;
-  max-height: 190px;
+  max-height: 360px;
   ${mobile({
     maxHeight: '388px'
   })}

@@ -13,17 +13,20 @@ import FilterProducts from '../pages/FilterProducts';
 import SearchResult from '../pages/SearchResult';
 import NotFound from '../pages/NotFound';
 import { UpdateCart } from '../redux/Products/actions';
+import { getWishList } from '../redux/Products/actions';
 
 function Client() {
 
   const currentUser = useSelector((state) => state.user.user)
+  const userId = useSelector(state => state.user?.user?.userId) || '';
   const dispatch = useDispatch();
 
   const resetNumberCart = 0
 
   useEffect(() => {
     dispatch(UpdateCart(resetNumberCart));
-  },[dispatch])
+    dispatch(getWishList(userId))
+  },[dispatch, userId])
 
   return (
     <>

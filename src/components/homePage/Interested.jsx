@@ -6,7 +6,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import {mobile} from '../../responsive';
-import { actFetchClothesRequest, AddWishList } from '../../redux/Products/actions';
+import { actFetchClothesRequest } from '../../redux/Products/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { CircularProgress } from '@material-ui/core';
 import WishListIcon from '../common/WishListIcon';
@@ -50,15 +50,9 @@ function Interested() {
 
   const dispatch = useDispatch()
 
-  const userId = useSelector(state => state.user?.user?.userId) || '';
   const data = useSelector((state) => state._todoProduct._clothes.product)
   const loading = useSelector((state) => state._todoProduct.loading)
   const WishList = useSelector((state) => state._todoProduct.WishList)
-
-
-  const addWishList = (productId) => {
-    dispatch(AddWishList(userId, productId));
-  }
 
   useEffect(() => {
     dispatch(actFetchClothesRequest())

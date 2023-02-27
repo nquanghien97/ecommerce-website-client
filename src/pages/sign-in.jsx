@@ -10,7 +10,7 @@ function SignIn() {
 
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.user.isLoading)
-  const errorMessage = useSelector(state => state.user.message)
+  const errorMessage = useSelector(state => state.user.message_login)
   
   const [input, setInput] = useState({
     username: '',

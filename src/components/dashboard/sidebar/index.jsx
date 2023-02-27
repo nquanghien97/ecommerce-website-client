@@ -42,7 +42,7 @@ function Sidebar() {
           width: 240
         }}
         open={open}
-        ModalProps={{ onBackdropClick: handleClose}}
+        ModalProps={{ onClose: handleClose}}
       >
         <Box className={classes.sidebar} display="flex" flexDirection="column" height="100%">
           <Box textAlign="right" p={2}>

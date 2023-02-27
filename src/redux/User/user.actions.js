@@ -1,4 +1,4 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, SET_MESSAGE, LOADING } from './user.type';
+import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOADING } from './user.type';
 import { loginUser } from '../../api/auth/loginServices';
 import { registerUser } from '../../api/auth/registerServices';
 import { logOut } from '../../api/auth/logoutServices';
@@ -19,10 +19,6 @@ export const register = (username, password, fullName) => (dispatch) => {
         payload: { user: res },
       })
 
-      dispatch({
-        type: SET_MESSAGE,
-        payload: res.data.message,
-      });
       return Promise.resolve();
     },
       (err) => {
