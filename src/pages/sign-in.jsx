@@ -13,7 +13,7 @@ function SignIn() {
   const errorMessage = useSelector(state => state.user.message_login)
   
   const [input, setInput] = useState({
-    username: '',
+    email: '',
     password: '',
   })
   const [textErr, setTextErr] = useState();
@@ -27,12 +27,12 @@ function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, password } = input
+    const { email, password } = input
 
     try {
-      dispatch(login(username, password));
+      dispatch(login(email, password));
       setInput({
-        username: '',
+        email: '',
         password: '',
       })
     }catch(err) {
@@ -55,10 +55,10 @@ function SignIn() {
       <Form onSubmit={handleSubmit}>
         <Wrapper>
           <Input
-            type="username"
-            name="username"
-            placeholder="Username"
-            value={input.username}
+            type="email"
+            name="email"
+            placeholder="email"
+            value={input.email}
             onChange={handleChange}
           />
           <Input

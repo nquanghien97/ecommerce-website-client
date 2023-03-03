@@ -24,7 +24,7 @@ function SignUp() {
 
   const [input, setInput] = useState({
     fullName: '',
-    username: '',
+    email: '',
     password: '',
     confirmPassword: '',
     errors: '',
@@ -32,7 +32,7 @@ function SignUp() {
   
   const handleSubmit = async e => {
     e.preventDefault();
-    const { fullName, username, password, confirmPassword } = input
+    const { fullName, email, password, confirmPassword } = input
 
 
     if(password !== confirmPassword) {
@@ -44,8 +44,8 @@ function SignUp() {
       return;
     }
       try {
-        // if(!username || !password || !fullName) return;
-        dispatch(register(username, password, fullName));
+        // if(!email || !password || !fullName) return;
+        dispatch(register(email, password, fullName));
 
         setInput({
           ...input,
@@ -82,9 +82,9 @@ function SignUp() {
             onChange={handleChange}
           />
           <Input
-            name="username"
-            placeholder="Username"
-            value={input.username}
+            name="email"
+            placeholder="Email"
+            value={input.email}
             onChange={handleChange}
           />
           <Input

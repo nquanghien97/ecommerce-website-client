@@ -9,9 +9,9 @@ export const loading = () => {
   }
 }
 
-export const register = (username, password, fullName) => (dispatch) => {
+export const register = (email, password, fullName) => (dispatch) => {
   dispatch(loading())
-  return registerUser(username, password, fullName)
+  return registerUser(email, password, fullName)
     .then(
       (res) => {
       dispatch({
@@ -38,10 +38,10 @@ export const register = (username, password, fullName) => (dispatch) => {
       )
 }
 
-export const login = (username, password) => {
+export const login = (email, password) => {
   return (dispatch) => {
     dispatch(loading())
-    return loginUser(username, password).then(
+    return loginUser(email, password).then(
       (data) => {
         dispatch({
           type: LOGIN_SUCCESS,
