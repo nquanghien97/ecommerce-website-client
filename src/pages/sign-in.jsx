@@ -144,7 +144,7 @@ const Input = styled.input`
   margin: 8px 0;
   border-radius: 5px;
   border: 1px solid black;
-  font-size: 16px;
+  // font-size: 16px;
   ${mobile({width: '300px'})};
 `
 
