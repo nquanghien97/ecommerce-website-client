@@ -95,9 +95,11 @@ function Navbar() {
   },[setIsComponentVisible])
 
   const initNumberCart = listCart?.reduce((acc, cur) => acc + cur.quantity,0) || 0
+  let totalNumberCart = numberCart+ initNumberCart
 
   if(!userId) {
     numberWishList = 0
+    totalNumberCart = 0
   }
   return (
     <NavbarContainer>
@@ -166,7 +168,7 @@ function Navbar() {
                   </Badge>
                 </IconItems>
                 <IconItems onClick={goToCart}>
-                  <Badge overlap="rectangular" badgeContent={ numberCart+ initNumberCart } color="secondary">
+                  <Badge overlap="rectangular" badgeContent={ totalNumberCart } color="secondary">
                     <ShoppingCartSharpIcon />
                   </Badge>
                 </IconItems>
