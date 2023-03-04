@@ -1,7 +1,8 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOADING } from './user.type';
+import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOADING, UPDATE_USER } from './user.type';
 import { loginUser } from '../../api/auth/loginServices';
 import { registerUser } from '../../api/auth/registerServices';
 import { logOut } from '../../api/auth/logoutServices';
+// import { getUser } from '../../api/userServices';
 
 export const loading = () => {
   return {
@@ -13,10 +14,10 @@ export const register = (email, password, fullName) => (dispatch) => {
   dispatch(loading())
   return registerUser(email, password, fullName)
     .then(
-      (res) => {
+      (data) => {
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: { user: res },
+        payload: data,
       })
 
       return Promise.resolve();
@@ -45,7 +46,7 @@ export const login = (email, password) => {
       (data) => {
         dispatch({
           type: LOGIN_SUCCESS,
-          payload: { user: data },
+          payload: data,
         });
   
         return Promise.resolve();
@@ -77,3 +78,10 @@ export const logout = () => (dispatch) => {
     type: LOGOUT,
   });
 };
+
+export function updateUser(payload) {
+  return {
+    type: UPDATE_USER,
+    payload
+  }
+}

@@ -53,7 +53,7 @@ function Product() {
     fetchProduct()
   },[id])
 
-  const userId = useSelector(state => state.user.user.userId);
+  const userId = useSelector(state => state.user.user?.user._id);
   const WishList = useSelector((state) => state._todoProduct.WishList)
 
   if(loading) {

@@ -31,7 +31,7 @@ function Navbar() {
 
   const numberCart = useSelector((state => state._todoProduct.numberCart));
   let numberWishList = useSelector((state => state._todoProduct.numberWishList));
-  const userId = useSelector((state => state.user?.user?.userId))
+  const userId = useSelector((state => state.user?.user?.user._id))
 
   const onChangeSearch = (e) => {
     setTextSearch(e.target.value);

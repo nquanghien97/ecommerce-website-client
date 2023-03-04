@@ -97,7 +97,7 @@ export default function todoProduct(state = initProduct, action){
                 ...state,
             }
         case GET_WISH_LIST:
-            const newWishList = action.payload.data.wishLists.map(({productId: {...product}}) => product)
+            const newWishList = action.payload.data?.wishLists.map(({productId: {...product}}) => product)
             return {
                 ...state,
                 WishList: newWishList,

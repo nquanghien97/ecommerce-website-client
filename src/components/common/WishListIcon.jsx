@@ -10,7 +10,7 @@ function WishListIcon(props) {
 
   const dispatch = useDispatch();
 
-  const userId = useSelector(state => state.user?.user?.userId) || '';
+  const userId = useSelector(state => state.user?.user?.user._id) || '';
 
   const [like, setLike] = useState(liked)
 

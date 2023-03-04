@@ -14,4 +14,6 @@ export const SET_MESSAGE_REGISTER = "SET_MESSAGE_REGISTER";
 
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 
-export const LOADING = "LOADING"
+export const LOADING = "LOADING";
+
+export const UPDATE_USER = "UPDATE_USER";

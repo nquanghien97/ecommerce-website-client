@@ -66,6 +66,8 @@ function SignUp() {
     })
   }
 
+  console.log(input)
+
   return (
     <Container>
       <Content>

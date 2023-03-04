@@ -1,4 +1,4 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOADING, SET_MESSAGE_LOGIN, SET_MESSAGE_REGISTER } from './user.type';
+import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOADING, UPDATE_USER } from './user.type';
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -18,7 +18,7 @@ const userReducer = (state = initialState, action) => {
         ...state,
         isLoggedIn: true,
         isLoading: false,
-        user: action.payload.user,
+        user: action.payload,
         message_register: ''
       };
     case REGISTER_FAIL:
@@ -32,7 +32,7 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: true,
-        user: action.payload.user,
+        user: action.payload,
         isLoading: false,
         message_login: ''
       };
@@ -56,7 +56,10 @@ const userReducer = (state = initialState, action) => {
         user: null,
         isLoading: false,
       };
-    
+    case UPDATE_USER:
+      return {
+        user: action.payload
+      }
     default:
       return state;
   }

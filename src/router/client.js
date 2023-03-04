@@ -14,11 +14,12 @@ import SearchResult from '../pages/SearchResult';
 import NotFound from '../pages/NotFound';
 import { UpdateCart } from '../redux/Products/actions';
 import { getWishList } from '../redux/Products/actions';
+import Profile from '../pages/Profile';
 
 function Client() {
 
   const currentUser = useSelector((state) => state.user.user)
-  const userId = useSelector(state => state.user?.user?.userId) || '';
+  const userId = useSelector(state => state.user.user?.user?._id) || '';
   const dispatch = useDispatch();
 
   const resetNumberCart = 0
@@ -41,6 +42,7 @@ function Client() {
         <Route path='/female' element={<FilterProducts />} />
         <Route path='/male' element={<FilterProducts />} />
         <Route path='/search' element={<SearchResult />}/>
+        <Route path='profile' element={<Profile />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>

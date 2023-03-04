@@ -1,16 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../redux/User/user.actions';
+import { Avatar, Box } from '@material-ui/core';
 
 function Profile() {
 
   const dispatch = useDispatch();
 
-  const userStatus = useSelector(state => state.user.user)
+  const navigate = useNavigate();
+
+  const userStatus = useSelector(state => state.user.user?.user)
+
+  const imageUrl = useSelector(state => state.user.user?.user.imageUrl);
 
   const logOut = () => dispatch(logout())
+
+  const goToProfile = () => {
+    navigate('/profile')
+  }
 
   return (
     <Container>
@@ -20,6 +29,9 @@ function Profile() {
           <Text>
             {`Xin chào ${userStatus?.fullName}`}
           </Text>
+          <Box style={{display: 'flex', justifyContent: 'center', alignContent: 'center', margin: '8px 0', cursor: 'pointer'}} onClick={goToProfile}>
+            <Avatar style={{width: '60px', height: '60px'}} alt="avatar" src={imageUrl} />
+          </Box>
           <Link to='/sign-in'>
             <MenuItems onClick={() => logOut()}>
               Đăng xuất

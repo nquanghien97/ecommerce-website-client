@@ -7,7 +7,7 @@ import Cart from './pages/Cart';
 
 function App() {
 
-  const roles =  useSelector((state) => state.user?.user?.role)
+  const roles =  useSelector((state) => state.user?.user?.user.role)
 
   return (
     <Routes>

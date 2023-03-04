@@ -29,7 +29,8 @@ function WishList() {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
 
-  const userId = useSelector(state => state.user?.user?.userId) || '';
+  const userId = useSelector(state => state.user.user?.user._id) || '';
+  console.log(userId)
   const addCart = (productId, price) => dispatch(AddCart(productId, price, userId))
   
   const numberWishList = useSelector((state) => state._todoProduct.numberWishList)

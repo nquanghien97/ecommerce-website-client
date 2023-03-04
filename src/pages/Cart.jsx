@@ -31,7 +31,7 @@ function Cart() {
 
   const dispatch = useDispatch();
 
-  const userId = useSelector(state => state.user?.user?.userId) || '';
+  const userId = useSelector(state => state.user?.user?.user._id) || '';
 
   const [listCart, setListCart] = useState([])
   const [newCart, setNewCart] = useState([]);
@@ -139,8 +139,6 @@ function Cart() {
       </>
     )
   }
-
-  console.log(loading)
   
   return (
     <>
