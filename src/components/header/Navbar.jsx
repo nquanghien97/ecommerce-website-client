@@ -101,6 +101,7 @@ function Navbar() {
     numberWishList = 0
     totalNumberCart = 0
   }
+
   return (
     <NavbarContainer>
       <NavbarInnerContainer>

@@ -3,6 +3,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { useDispatch, useSelector } from 'react-redux';
 import { AddWishList } from '../../redux/Products/actions';
+import { openSnackBar } from '../../redux/User/user.actions';
 
 function WishListIcon(props) {
 
@@ -11,6 +12,7 @@ function WishListIcon(props) {
   const dispatch = useDispatch();
 
   const userId = useSelector(state => state.user?.user?.user._id) || '';
+  const isLogin = useSelector(state => state.user.isLoggedIn);
 
   const [like, setLike] = useState(liked)
 
@@ -19,8 +21,12 @@ function WishListIcon(props) {
   },[liked])
     
   const addWishList = () => {
-    dispatch(AddWishList(userId, item._id, item));
-    setLike(!like)
+    if(!isLogin) {
+      dispatch(openSnackBar(true))
+    } else {
+      dispatch(AddWishList(userId, item._id, item));
+      setLike(!like)
+    }
   }
 
 

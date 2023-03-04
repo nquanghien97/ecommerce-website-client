@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { useDispatch, useSelector } from 'react-redux';
-import { AddCart, AddWishList } from '../redux/Products/actions';
+import { AddCart } from '../redux/Products/actions';
 import { mobile } from '../responsive';
 import { getProduct } from '../api/productServices';
 import { Box, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import WishListIcon from '../components/common/WishListIcon';
+import { openSnackBar } from '../redux/User/user.actions';
 
 const useStyles = makeStyles({
   loading: {
@@ -27,16 +27,17 @@ function Product() {
   const { id } = useParams();
 
   const dispatch = useDispatch();
+  const isLogin = useSelector(state => state.user.isLoggedIn)
 
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const addCart = (_id, price, userId) => {
-    dispatch(AddCart(_id, price, userId))
-  }
-
-  const addWishList = (item) => {
-    dispatch(AddWishList(item))
+    if(!isLogin) {
+      dispatch(openSnackBar(true))
+    } else {
+      dispatch(AddCart(_id, price, userId))
+    }
   }
 
   useEffect(() => {
