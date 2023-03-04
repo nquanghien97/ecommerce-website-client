@@ -14,15 +14,17 @@ import useComponentVisible from '../hooks/useComponentVisible';
 import Profile from '../common/Profile';
 import { suggestionsServices } from '../../api/suggestionsServices';
 import { getCartServices } from '../../api/cartServices'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import menuItems from '../../config/menuItemNavbar';
+import { openSnackBar } from '../../redux/User/user.actions';
 
 function Navbar() {
 
   const [extendNavbar, setExtendNavbar] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const dispatch =  useDispatch();
   
   const [textSearch, setTextSearch] = useState('')
 
@@ -31,7 +33,8 @@ function Navbar() {
 
   const numberCart = useSelector((state => state._todoProduct.numberCart));
   let numberWishList = useSelector((state => state._todoProduct.numberWishList));
-  const userId = useSelector((state => state.user?.user?.user._id))
+  const userId = useSelector((state => state.user?.user?.user._id));
+  const isLogin = useSelector((state => state.user?.isLoggedIn));
 
   const onChangeSearch = (e) => {
     setTextSearch(e.target.value);
@@ -41,11 +44,13 @@ function Navbar() {
   useEffect(() => {
     suggestionsServices(textSearch)
       .then((data) => textSearch && setDataSearch(data.data.data))
-    const fetchCart = async () => {
-        const res = await getCartServices(userId)
-        setListCart(res.data?.data?.products)
-      }
-    fetchCart()
+    if(userId) {
+      const fetchCart = async () => {
+          const res = await getCartServices(userId)
+          setListCart(res.data?.data?.products)
+        }
+      fetchCart()
+    }
   },[textSearch, userId])
 
   const onShowProfile = (e) => {
@@ -66,6 +71,22 @@ function Navbar() {
   const goToSearchResult = () => {
     navigate(`search?name=${textSearch}`);
     setIsComponentVisible(false)
+  }
+
+  const goToWishList = () => {
+    if(!isLogin) {
+      dispatch(openSnackBar(true))
+    } else {
+      navigate('./wishlist')
+    }
+  }
+
+  const goToCart = () => {
+    if(!isLogin) {
+      dispatch(openSnackBar(true))
+    } else {
+      navigate('/cart')
+    }
   }
 
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(true)
@@ -139,19 +160,15 @@ function Navbar() {
                 </div>
             ): null}
             <IconContainer>
-                <IconItems>
-                  <Link to='/wishlist'>
-                    <Badge overlap="rectangular" badgeContent={ numberWishList } color="secondary">
-                      <FavoriteBorderSharpIcon />
-                    </Badge>
-                  </Link>
+                <IconItems onClick={goToWishList}>
+                  <Badge overlap="rectangular" badgeContent={ numberWishList } color="secondary">
+                    <FavoriteBorderSharpIcon />
+                  </Badge>
                 </IconItems>
-                <IconItems>
-                  <Link to='cart'>
-                    <Badge overlap="rectangular" badgeContent={ numberCart+ initNumberCart } color="secondary">
-                      <ShoppingCartSharpIcon />
-                    </Badge>
-                  </Link>
+                <IconItems onClick={goToCart}>
+                  <Badge overlap="rectangular" badgeContent={ numberCart+ initNumberCart } color="secondary">
+                    <ShoppingCartSharpIcon />
+                  </Badge>
                 </IconItems>
                 <IconItems onClick={onShowProfile}>
                   <AccountCircleOutlinedIcon />

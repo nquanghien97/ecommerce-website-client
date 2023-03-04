@@ -17,3 +17,5 @@ export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 export const LOADING = "LOADING";
 
 export const UPDATE_USER = "UPDATE_USER";
+
+export const OPEN_SNACK_BAR = "OPEN_SNACK_BAR";

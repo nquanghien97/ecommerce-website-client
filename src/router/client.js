@@ -25,8 +25,10 @@ function Client() {
   const resetNumberCart = 0
 
   useEffect(() => {
-    dispatch(UpdateCart(resetNumberCart));
-    dispatch(getWishList(userId))
+    if(userId) {
+      dispatch(UpdateCart(resetNumberCart));
+      dispatch(getWishList(userId))
+    }
   },[dispatch, userId])
 
   return (
@@ -37,7 +39,7 @@ function Client() {
         <Route path='/product/:id' element={<Product />} />
         <Route path='/sign-in' element={ currentUser ? <Navigate to="/" replace /> : <SignIn />} />
         <Route path='/sign-up' element={ currentUser ? <Navigate to="/" replace /> : <SignUp />} />
-        <Route path='/wishlist' element={<WishList />} />
+        <Route path='/wishlist' element={ <WishList /> }/>
         <Route path='/allproducts' element={<AllProducts />} />
         <Route path='/female' element={<FilterProducts />} />
         <Route path='/male' element={<FilterProducts />} />

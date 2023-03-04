@@ -1,10 +1,10 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOADING, UPDATE_USER } from './user.type';
+import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, LOADING, UPDATE_USER, OPEN_SNACK_BAR } from './user.type';
 
 const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = user
-  ? { isLoggedIn: true, isLoading: false, user , message_login: '', message_register: '' }
-  : { isLoggedIn: false, isLoading: false, user: null, message_login: '', message_register: '' };
+  ? { isLoggedIn: true, isLoading: false, user , message_login: '', message_register: '', openSnackbar: false }
+  : { isLoggedIn: false, isLoading: false, user: null, message_login: '', message_register: '', openSnackbar: false };
   
 const userReducer = (state = initialState, action) => {
   switch(action.type) {
@@ -34,7 +34,8 @@ const userReducer = (state = initialState, action) => {
         isLoggedIn: true,
         user: action.payload,
         isLoading: false,
-        message_login: ''
+        message_login: '',
+        openSnackbar: false,
       };
     case LOGIN_FAIL:
       return {
@@ -59,6 +60,11 @@ const userReducer = (state = initialState, action) => {
     case UPDATE_USER:
       return {
         user: action.payload
+      }
+    case OPEN_SNACK_BAR:
+      return {
+        ...state,
+        openSnackbar: action.payload
       }
     default:
       return state;
