@@ -13,21 +13,20 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ccc'
+    backgroundColor: '#ccc',
   },
   wrapper: {
-    backgroundImage: 'url(https://img.freepik.com/free-photo/cyber-monday-retail-sales_23-2148688493.jpg?w=1480&t=st=1678180167~exp=1678180767~hmac=eeccb5a9f87551b52d2289aa6099d1b191dfa050e0a3c2adb98e94afc3f51c0f)',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
     width: '100%',
-    height: '70%',
-    borderRadius: '5px'
+    height: '80%',
+    borderRadius: '5px',
+    backgroundColor: '#f5f5f5',
+    marginTop: '80px'
   },
   formContainer: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    padding: '24px',
   },
   form: {
     display: 'flex',
@@ -40,6 +39,15 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  right: {
+    backgroundImage: 'url(/images/image-login.png)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+    backgroundPosition: 'center',
+    '@media (max-width:960px)' : {
+      display: 'none'
+    }
   }
 })
 
@@ -80,8 +88,8 @@ function SignIn() {
 
   return (
     <Container className={classes.container} maxWidth='xl'>
-      <Grid container spacing={6} className={classes.wrapper}>
-        <Grid item xs={12} sm={6} className={classes.formContainer}>
+      <Grid container className={classes.wrapper}>
+        <Grid item xs={12} md={6} className={classes.formContainer}>
           <Typography variant="h2" style={{margin: '20px 0', textAlign: 'center'}}>Đăng nhập</Typography>
           <Box style={{}}>
             <Formik
@@ -137,6 +145,7 @@ function SignIn() {
             </Link>
           </Box>
         </Grid>
+        <Grid item xs={false} md={6} className={classes.right}></Grid>
       </Grid>
     </Container>
   )

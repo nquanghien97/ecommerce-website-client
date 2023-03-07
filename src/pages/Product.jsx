@@ -86,8 +86,7 @@ function Product() {
               Thêm vào giỏ hàng
             </AddCard>
             <AddWishListWrapper>
-              {/* <FavoriteBorderIcon className='icon' onClick={()=> addWishList(product)} style={{ fontSize:'32px'}} /> */}
-              <WishListIcon item={product} liked={WishList.filter(like => like._id === product._id).length > 0 ? true : false} />
+              <WishListIcon item={product} liked={WishList ? WishList.filter(like => like._id === product._id).length > 0 ? true : false : false} />
             </AddWishListWrapper>
           </AddWrapper>
         </BuySection>

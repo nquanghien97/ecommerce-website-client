@@ -73,7 +73,7 @@ function Shoes() {
                       </Slide>
                     </Link>
                     <Icon>
-                      <WishListIcon item={item} liked={WishList.filter(like => like._id === item._id).length > 0 ? true : false} />
+                      <WishListIcon item={item} liked={WishList ? WishList.filter(like => like._id === item._id).length > 0 ? true : false : false} />
                     </Icon>
                   </div>
                 ))}

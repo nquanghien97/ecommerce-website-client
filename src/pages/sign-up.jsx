@@ -1,14 +1,57 @@
 import { useState, useEffect } from 'react'
-import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { mobile } from '../responsive';
 import { register } from '../redux/User/user.actions';
 import { Link } from 'react-router-dom';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Container, Grid, Typography, Box, TextField, Button } from '@material-ui/core';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import { makeStyles } from '@material-ui/core/styles';
+import { useNavigate } from 'react-router-dom';
+
+const useStyles = makeStyles({
+  container: {
+    height: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ccc',
+  },
+  wrapper: {
+    backgroundColor: '#ffffff',
+    padding: '24px 0',
+    height: '80%',
+    borderRadius: '5px',
+    marginTop: '80px',
+  },
+  left: {
+    backgroundImage: 'url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+    backgroundPosition: 'center',
+    '@media (max-width:960px)' : {
+      display: 'none'
+    }
+  },
+  formContainer: {
+    padding: '24px'
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  signin: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+})
 
 function SignUp() {
 
+  const classes = useStyles();
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const loading = useSelector((state) => state.user.isLoading)
   const errorMessage = useSelector(state => state.user.message_register)
@@ -21,196 +64,123 @@ function SignUp() {
       setTextErr('')
     }
   },[errorMessage])
+  
+  const handleSubmit = (values)=> {
+    try {
+      dispatch(register(values.email, values.password, values.fullName))
+      // navigate('/')
+    }
+    catch(error) {
+      console.log(error)
+  }
+  }
 
-  const [input, setInput] = useState({
+  const initialValues = {
     fullName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    errors: '',
-  })
-  
-  const handleSubmit = async e => {
-    e.preventDefault();
-    const { fullName, email, password, confirmPassword } = input
+  };
 
 
-    if(password !== confirmPassword) {
-      const err = 'Mật khẩu không khớp';
-      setInput({
-        ...input,
-        errors: err
-      })
-      return;
-    }
-      try {
-        // if(!email || !password || !fullName) return;
-        dispatch(register(email, password, fullName));
-
-        setInput({
-          ...input,
-          errors: [],
-        })
-        // navigate("/sign-in")
-      }
-      catch(error) {
-        console.log(error)
-    }
-  }
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInput({
-      ...input,
-      [name]: value
+  const validationSchema = Yup.object().shape({
+    fullName: Yup.string()
+      .required('Trường này là bắt buộc'),
+    email: Yup.string()
+      .required('Trường này là bắt buộc'),
+    password: Yup.string()
+      .required('Trường này là bắt buộc'),
+    confirmPassword: Yup.string().when("password", {
+      is: val => (val && val.length > 0 ? true : false),
+      then: Yup.string().oneOf(
+        [Yup.ref("password")],
+        "Both password need to be the same"
+      )
     })
-  }
-
-  console.log(input)
+  });
 
   return (
-    <Container>
-      <Content>
-      <Title>Đăng ký</Title>
-      { input.errors.length > 0 && (
-          <p style={{color: 'red'}}>{input.errors}</p>
-      )}
-      <Form onSubmit={handleSubmit}>
-        <Wrapper>
-          <Input
-            name="fullName"
-            placeholder="Họ tên"
-            value={input.fullName}
-            onChange={handleChange}
-          />
-          <Input
-            name="email"
-            placeholder="Email"
-            value={input.email}
-            onChange={handleChange}
-          />
-          <Input
-            name="password"
-            type="password"
-            placeholder="Mật khẩu"
-            value={input.password}
-            onChange={handleChange}
-          />
-          <Input
-            name="confirmPassword"
-            type="password"
-            placeholder="Xác nhận mật khẩu"
-            value={input.confirmPassword}
-            onChange={handleChange}
-          />
-        </Wrapper>
-        {textErr ? (
-          <div style={{textAlign: 'center', marginBottom: '16px', color: 'red'}}>
-            <p>{textErr}</p>
-          </div>
-        ) : null}
-        <ButtonWrapper>
-          <Button>
-            {loading ? <CircularProgress style={{marginRight:'8px', width:'20px', height:'20px'}} /> : null}
-            Đăng ký
-          </Button>
-        </ButtonWrapper>
-        <SignInWrapper>
-          Bạn đã có tài khoản?
-          <Link to='/sign-in'>
-            <SignIn>
-              Đăng nhập
-            </SignIn>
-          </Link>
-      </SignInWrapper>
-      </Form>
-      </Content>
+    <Container className={classes.container} maxWidth='xl'>
+      <Grid container className={classes.wrapper}>
+        <Grid item xs={false} md={6} className={classes.left}></Grid>
+        <Grid item xs={12} md={6} className={classes.formContainer}>
+          <Typography variant="h2" style={{margin: '20px 0', textAlign: 'center'}}>Đăng ký</Typography>
+          <Box>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {(props) => (
+                <Form>
+                  <Box className={classes.form}>
+                    <Field
+                      as={TextField}
+                      style={{margin: '12px 0'}}
+                      variant="outlined"
+                      name="fullName"
+                      label="Họ tên"
+                      onChange={props.handleChange('fullName')}
+                      helperText={props.errors.fullName}
+                    />
+                    <Field
+                      as={TextField}
+                      style={{margin: '12px 0'}}
+                      variant="outlined"
+                      type="email"
+                      name="email"
+                      label="Email"
+                      onChange={props.handleChange('email')}
+                      helperText={props.errors.email}
+                    />
+                    <Field
+                      as={TextField}
+                      style={{margin: '12px 0'}}
+                      variant="outlined"
+                      name="password"
+                      type="password"
+                      label="Mật khẩu"
+                      onChange={props.handleChange('password')}
+                      helperText={props.errors.password}
+                    />
+                    <Field
+                      as={TextField}
+                      style={{margin: '12px 0'}}
+                      variant="outlined"
+                      name="confirmPassword"
+                      type="password"
+                      label="Xác nhận mật khẩu"
+                      onChange={props.handleChange('confirmPassword')}
+                      helperText={props.errors.confirmPassword}
+                    />
+                  </Box>
+                  {textErr ? (
+                    <div style={{textAlign: 'center', marginBottom: '16px', color: 'red'}}>
+                      <p>{textErr}</p>
+                    </div>
+                  ) : null}
+                  <Box style={{margin: '20px 0'}}>
+                    <Button fullWidth variant="contained" color="primary" type="submit" style={{padding: '12px', fontSize: '20px'}}>
+                      {loading ? <CircularProgress color="inherit" style={{marginRight:'8px', width:'20px', height:'20px'}} /> : null}
+                      Đăng ký
+                    </Button>
+                  </Box>
+                  <Box className={classes.signin}>
+                    <Typography>Bạn đã có tài khoản?</Typography>
+                    <Link to='/sign-in'>
+                      <Typography style={{color: 'blue', marginLeft: '8px'}}>
+                        Đăng nhập
+                      </Typography>
+                    </Link>
+                </Box>
+                </Form>
+              )}
+            </Formik>
+          </Box>
+        </Grid>
+      </Grid>
     </Container>
   )
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`
-
-const Content = styled.div`
-  background: whitesmoke;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  ${mobile({
-    padding: '40px 0',
-    marginTop: '20px',
-  })}
-`
-
-const Title = styled.h1`
-  padding: 20px;
-  ${mobile({
-    padding: 0,
-  })}
-`
-
-const Form = styled.form`
-  padding: 20px;
-`
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
-const Input = styled.input`
-  width: 400px;
-  padding: 16px;
-  margin: 8px 0;
-  border-radius: 5px;
-  border: 1px solid black;
-  font-size: 16px;
-  ${mobile({width: '300px'})};
-`
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 12px;
-`
-
-const Button = styled.button`
-  font-size: 20px;
-  padding: 10px 40px;
-  border-radius: 5px;
-  cursor: pointer;
-  border: none;
-  background-color: #2acd83;
-  &:hover {
-    background-color: #8dd3b3;
-  }
-`
-
-const SignInWrapper = styled.div`
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
-
-const SignIn = styled.span`
-  margin-left: 8px;
-  color: blue;
-  cursor: pointer;
-  &:hover {
-      text-decoration: underline;
-  }
-`
 
 export default SignUp
