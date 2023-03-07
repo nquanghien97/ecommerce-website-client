@@ -1,21 +1,54 @@
 import { useState, useEffect } from 'react'
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { mobile } from '../responsive';
 import { login } from '../redux/User/user.actions';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Container, Box, TextField, Grid, Typography, Button } from '@material-ui/core';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  container: {
+    height: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ccc'
+  },
+  wrapper: {
+    backgroundImage: 'url(https://img.freepik.com/free-photo/cyber-monday-retail-sales_23-2148688493.jpg?w=1480&t=st=1678180167~exp=1678180767~hmac=eeccb5a9f87551b52d2289aa6099d1b191dfa050e0a3c2adb98e94afc3f51c0f)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    width: '100%',
+    height: '70%',
+    borderRadius: '5px'
+  },
+  formContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  imageContainer: {
+    width: '100%'
+  },
+  signup: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+})
 
 function SignIn() {
 
+  const classes = useStyles();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.user.isLoading)
   const errorMessage = useSelector(state => state.user.message_login)
-  
-  const [input, setInput] = useState({
-    email: '',
-    password: '',
-  })
   const [textErr, setTextErr] = useState();
   
   useEffect(() => {
@@ -25,152 +58,88 @@ function SignIn() {
     }
   },[errorMessage])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { email, password } = input
-
+  const handleSubmit = (values) => {
     try {
-      dispatch(login(email, password));
-      setInput({
-        email: '',
-        password: '',
-      })
+      dispatch(login(values.email, values.password));
     }catch(err) {
       console.log(err)
     }
   }
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInput({
-      ...input,
-      [name]: value
-    })
-  }
+  const initialValues = {
+    email: '',
+    password: ''
+  };
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .required('Trường này là bắt buộc'),
+    password: Yup.string()
+      .required('Trường này là bắt buộc'),
+  });
 
   return (
-    <Container>
-      <Content>
-      <Title>Đăng nhập</Title>
-      <Form onSubmit={handleSubmit}>
-        <Wrapper>
-          <Input
-            type="email"
-            name="email"
-            placeholder="email"
-            value={input.email}
-            onChange={handleChange}
-          />
-          <Input
-            name="password"
-            type="password"
-            placeholder="Mật khẩu"
-            value={input.password}
-            onChange={handleChange}
-          />
-        </Wrapper>
-        {textErr ? (
-          <div style={{textAlign: 'center', marginBottom: '16px', color: 'red'}}>
-            <p>{textErr}</p>
-          </div>
-        ) : null}
-        <ButtonWrapper>
-          <Button type="submit">
-            {loading ? <CircularProgress style={{marginRight:'8px', width:'20px', height:'20px'}} /> : null}
-            Đăng nhập
-          </Button>
-        </ButtonWrapper>
-      </Form>
-      <SignUpWrapper>
-          Bạn chưa có tài khoản?
-          <Link to='/sign-up'>
-              <SignUp>
+    <Container className={classes.container} maxWidth='xl'>
+      <Grid container spacing={6} className={classes.wrapper}>
+        <Grid item xs={12} sm={6} className={classes.formContainer}>
+          <Typography variant="h2" style={{margin: '20px 0', textAlign: 'center'}}>Đăng nhập</Typography>
+          <Box style={{}}>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {(props) => (
+                <Form>
+                  <Box className={classes.form}>
+                    <Field
+                      style={{margin: '12px 0'}}
+                      as={TextField}
+                      variant="outlined"
+                      type="email"
+                      name="email"
+                      label="email"
+                      onChange={props.handleChange('email')}
+                      helperText={props.errors.email}
+                    />
+                    <Field
+                      style={{margin: '12px 0'}}
+                      as={TextField}
+                      variant="outlined"
+                      name="password"
+                      type="password"
+                      label="Mật khẩu"
+                      onChange={props.handleChange('password')}
+                      helperText={props.errors.email}
+                    />
+                  </Box>
+                  {textErr ? (
+                    <div style={{textAlign: 'center', marginBottom: '16px', color: 'red'}}>
+                      <p>{textErr}</p>
+                    </div>
+                  ) : null}
+                  <Box style={{margin: '20px 0'}}>
+                    <Button fullWidth variant="contained" color="primary" type="submit" style={{padding: '12px', fontSize: '20px'}}>
+                      {loading ? <CircularProgress color="inherit" style={{marginRight:'8px', width:'20px', height:'20px'}} /> : null}
+                      Đăng nhập
+                    </Button>
+                  </Box>
+                </Form>
+              )}
+            </Formik>
+          </Box>
+          <Box className={classes.signup}>
+            <Typography>Bạn chưa có tài khoản?</Typography>
+            <Link to='/sign-up'>
+              <Typography style={{color: 'blue', marginLeft: '8px'}}>
                   Đăng ký ngay
-              </SignUp>
-          </Link>
-      </SignUpWrapper>
-      </Content>
+              </Typography>
+            </Link>
+          </Box>
+        </Grid>
+      </Grid>
     </Container>
   )
 }
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  min-height: calc(100vh - 30px - 30px - 70px)
-  ${mobile({height: 'calc(100vh - 224px)'})}
-`
-
-const Content = styled.div`
-  background: whitesmoke;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  ${mobile({
-    padding: '40px 0',
-    marginTop: '20px',
-  })}
-`
-
-const Title = styled.h1`
-  padding: 20px;
-`
-
-const Form = styled.form`
-
-`
-
-const Wrapper = styled.div`
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-`
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const Input = styled.input`
-  width: 400px;
-  padding: 16px;
-  margin: 8px 0;
-  border-radius: 5px;
-  border: 1px solid black;
-  font-size: 16px;
-  ${mobile({width: '300px'})};
-`
-
-const Button = styled.button`
-  font-size: 20px;
-  padding: 10px 40px;
-  border-radius: 5px;
-  cursor: pointer;
-  border: none;
-  background-color: #2acd83;
-  &:hover {
-    background-color: #8dd3b3;
-  }
-`
-
-const SignUpWrapper = styled.div`
-  margin-top: 20px;
-`
-
-const SignUp = styled.span`
-  margin-left: 8px;
-  color: blue;
-  cursor: pointer;
-  &:hover {
-      text-decoration: underline;
-  }
-`
 
 export default SignIn
