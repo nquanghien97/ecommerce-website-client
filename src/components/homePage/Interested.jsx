@@ -122,6 +122,8 @@ const ButtonTwo = styled.button`
 const Container = styled.div`
   overflow: hidden;
   position: relative;
+  max-width: 1600px;
+  margin: auto;
 `
 
 const InterestedContainer = styled.div`

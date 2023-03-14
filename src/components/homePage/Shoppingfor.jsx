@@ -43,6 +43,8 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     padding: 25px;
+    max-width: 1600px;
+    margin: auto;
 `
 
 const TextContainer = styled.h1`

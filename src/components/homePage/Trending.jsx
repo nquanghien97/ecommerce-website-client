@@ -54,7 +54,7 @@ function Trending() {
   }
     
   return(
-    <>
+    <div style={{maxWidth: '1600px', margin: 'auto'}}>
       <Text>What's Hot</Text>
       <Container>
         {loading ?
@@ -81,7 +81,7 @@ function Trending() {
           </Wrapper>
         }
       </Container>
-    </>
+    </div>
   )} 
 
 

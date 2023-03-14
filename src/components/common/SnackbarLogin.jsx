@@ -4,7 +4,7 @@ import { Close } from '@material-ui/icons';
 import { useDispatch } from 'react-redux';
 import { openSnackBar } from '../../redux/User/user.actions';
 
-function NotLoginPopup({isOpen}) {
+function SnackbarLogin({isOpen}) {
   const [open, setOpen] = useState(isOpen);
 
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ function NotLoginPopup({isOpen}) {
     <Snackbar
       open={open}
       message="Bạn phải đăng nhập trước"
-      autoHideDuration={4000}
+      autoHideDuration={3000}
       onClose={handleClose}
       anchorOrigin={{
         vertical: 'bottom',
@@ -38,4 +38,5 @@ function NotLoginPopup({isOpen}) {
   )
 }
 
-export default NotLoginPopup;
+export default SnackbarLogin;
+

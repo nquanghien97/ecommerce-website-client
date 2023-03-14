@@ -91,6 +91,8 @@ const renderButtonGroupOutside = styled.div`
 `
 
 const Container = styled.div`
+  max-width: 1600px;
+  margin: auto;
   padding:  0 15px;
   position: relative;
   padding-bottom: 30px;

@@ -4,7 +4,7 @@ import DashBoard from './router/dashboard';
 import Client from './router/client';
 import { useSelector } from 'react-redux';
 import Cart from './pages/Cart';
-import NotLoginPopup from './components/common/NotLoginPopup';
+import SnackbarLogin from './components/common/SnackbarLogin';
 
 function App() {
   const openSnackBar = useSelector(state => state.user.openSnackbar)
@@ -12,7 +12,7 @@ function App() {
 
   return (
     <>
-    {openSnackBar ? <NotLoginPopup isOpen={openSnackBar} /> : null}
+    {openSnackBar ? <SnackbarLogin isOpen={openSnackBar} /> : null}
     <Routes>
       <Route path='/*' element={roles === "admin" ? <Navigate to="/dashboard/" replace />: <Client />} />
       <Route path='/dashboard/*' element={roles === "admin" ? <DashBoard /> : <Client />} />

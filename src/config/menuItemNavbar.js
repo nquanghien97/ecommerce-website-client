@@ -15,10 +15,6 @@ const menuItems = [
     title: "Thể thao",
     path: "allproducts"
   },
-  {
-    title: "Các nhãn hiệu",
-    path: "allproducts"
-  }
 ]
 
 export default menuItems

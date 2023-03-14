@@ -11,29 +11,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import useComponentVisible from '../hooks/useComponentVisible';
 import Profile from '../common/Profile';
 import { suggestionsServices } from '../../api/suggestionsServices';
-
-const menuItems = [
-  {
-    title: "Nam",
-    path: "male"
-  },
-  {
-    title: "Nữ",
-    path: "female"
-  },
-  {
-    title: "Trẻ em",
-    path: "allproducts"
-  },
-  {
-    title: "Thể thao",
-    path: "allproducts"
-  },
-  {
-    title: "Các nhãn hiệu",
-    path: "allproducts"
-  }
-]
+import menuItems from '../../config/menuItemNavbar';
 
 function CartHeader() {
 

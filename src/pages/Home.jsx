@@ -8,6 +8,7 @@ import Shoes from '../components/homePage/Shoes';
 import Shoppingfor from '../components/homePage/Shoppingfor';
 import Notifications from '../components/homePage/Notifications';
 import Footer from '../components/footer';
+import { Container } from '@material-ui/core';
 
 function Home() {
 
@@ -24,7 +25,7 @@ function Home() {
       <Notifications />
       <Footer />
     </>
-  )
+)
 }
 
 export default Home

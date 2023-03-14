@@ -278,7 +278,7 @@ function Navbar() {
 `;
 
 const CenterContainer = styled.div`
-  flex: 60%;
+  flex: 40%;
   display: flex;
   justify-content: space-between;
   align-items: center;
