@@ -38,6 +38,7 @@ function CreateProduct() {
     name: '',
     description: '',
     gender: '',
+    type: '',
     status: '',
     price: '',
     category: '',
@@ -84,6 +85,8 @@ function CreateProduct() {
       .required('Trường này là bắt buộc'),
     gender: Yup.string()
       .required('Trường này là bắt buộc'),
+    type: Yup.string()
+      .required('Trường này là bắt buộc'),
     status: Yup.string()
       .required('Trường này là bắt buộc'),
     price: Yup.string()
@@ -96,6 +99,7 @@ function CreateProduct() {
     name: '',
     description: '',
     gender: '',
+    type: '',
     status: '',
     price: '',
     category: '',
@@ -104,6 +108,8 @@ function CreateProduct() {
   if(!newData) return (
     <div>Loading....</div>
   )
+
+  console.log(newData);
 
   return (
     <Container maxWidth={false} style={{display: "flex", height: "100vh", backgroundColor: "rgb(204, 204, 204, 0.9)"}}>
@@ -159,6 +165,14 @@ function CreateProduct() {
                     <option name="male" value="male">Male</option>
                     <option name="female" value="female">Female</option>
                     <option name="all" value="all">All</option>
+                  </select>
+                </div>
+                <div style={{display: "flex", flexDirection: "column", margin: '8px 0'}}>
+                  <select style={{padding: '8px 0', borderRadius: '5px', margin: "4px 0", fontSize: "16px"}} name="type" onChange={e => {handleChange(e)}} value={newData.type}>
+                    <option value="" disabled>Type</option>
+                    <option name="children" value="children">Children</option>
+                    <option name="sport" value="sport">Sport</option>
+                    <option name="none" value="none">None</option>
                   </select>
                 </div>
                 {file ? <img style={{maxWidth: "600px", maxHeight: "600px"}} alt="preview" src={URL.createObjectURL(file)} /> : null }

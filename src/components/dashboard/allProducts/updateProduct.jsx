@@ -172,6 +172,14 @@ function UpdateProduct() {
                       <option name="all" value="all">All</option>
                     </select>
                   </div>
+                  <div style={{display: "flex", flexDirection: "column", margin: '8px 0'}}>
+                  <select style={{padding: '8px 0', borderRadius: '5px', margin: "4px 0", fontSize: "16px"}} name="type" onChange={e => {handleChange(e)}} value={newData.type}>
+                    <option value="" disabled>Type</option>
+                    <option name="children" value="children">Children</option>
+                    <option name="sport" value="sport">Sport</option>
+                    <option name="none" value="none">None</option>
+                  </select>
+                </div>
                   {file ? 
                     <img style={{maxWidth: "600px", maxHeight: "600px"}} alt="preview" src={URL.createObjectURL(file)} />
                     : <img style={{maxWidth: "600px", maxHeight: "600px"}} src={newData.imageUrl} alt="preview" />}
