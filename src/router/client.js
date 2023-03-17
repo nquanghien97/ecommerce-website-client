@@ -43,6 +43,8 @@ function Client() {
         <Route path='/allproducts' element={<AllProducts />} />
         <Route path='/female' element={<FilterProducts />} />
         <Route path='/male' element={<FilterProducts />} />
+        <Route path='/children' element={<FilterProducts />} />
+        <Route path='/sport' element={<FilterProducts />} />
         <Route path='/search' element={<SearchResult />}/>
         <Route path='profile' element={<Profile />} />
         <Route path='*' element={<NotFound />} />

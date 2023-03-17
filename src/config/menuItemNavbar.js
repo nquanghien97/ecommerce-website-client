@@ -9,11 +9,11 @@ const menuItems = [
   },
   {
     title: "Trẻ em",
-    path: "allproducts"
+    path: "children"
   },
   {
     title: "Thể thao",
-    path: "allproducts"
+    path: "sport"
   },
 ]
 
