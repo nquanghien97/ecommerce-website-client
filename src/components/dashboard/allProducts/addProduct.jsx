@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createProduct } from '../../../api/productServices';
 import { useNavigate } from 'react-router-dom';
-import { Container, Box, Grid, Typography, TextField, Button, CircularProgress  } from '@material-ui/core';
+import { Container, Box, Grid, Typography, TextField, Button, CircularProgress } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { makeStyles } from '@material-ui/core/styles';
@@ -37,6 +37,7 @@ function CreateProduct() {
   const [newData, setNewData] = useState({
     name: '',
     description: '',
+    detail: '',
     gender: '',
     type: '',
     status: '',
@@ -83,6 +84,8 @@ function CreateProduct() {
       .required('Trường này là bắt buộc'),
     description: Yup.string()
       .required('Trường này là bắt buộc'),
+    detail: Yup.string()
+      .required('Trường này là bắt buộc'),
     gender: Yup.string()
       .required('Trường này là bắt buộc'),
     type: Yup.string()
@@ -98,6 +101,7 @@ function CreateProduct() {
   const initialValues = {
     name: '',
     description: '',
+    detail: '',
     gender: '',
     type: '',
     status: '',
@@ -143,6 +147,7 @@ function CreateProduct() {
                   className={classes.field}
                   fullWidth
                   as={TextField}
+                  variant="outlined"
                   value={newData.name}
                   label="Name"
                   name="name"
@@ -153,11 +158,25 @@ function CreateProduct() {
                   className={classes.field}
                   fullWidth
                   as={TextField}
+                  variant="outlined"
                   value={newData.description}
                   label="Description"
                   name="description"
                   onChange={e => {handleChange(e)}}
                   required
+                />
+                <Field
+                  className={classes.field}
+                  fullWidth
+                  as={TextField}
+                  variant="outlined"
+                  value={newData.detail}
+                  label="Detail"
+                  name="detail"
+                  onChange={e => {handleChange(e)}}
+                  required
+                  multiline
+                  rows={5}
                 />
                 <div style={{display: "flex", flexDirection: "column", margin: '8px 0'}}>
                   <select style={{padding: '8px 0', borderRadius: '5px', margin: "4px 0", fontSize: "16px"}} name="gender" onChange={e => {handleChange(e)}} value={newData.gender}>
@@ -195,6 +214,7 @@ function CreateProduct() {
                   className={classes.field}
                   fullWidth
                   as={TextField}
+                  variant="outlined"
                   value={newData.price}
                   label="Price"
                   name="price"
