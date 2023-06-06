@@ -184,7 +184,7 @@ const Icon = styled.div`
 
 const Image = styled.img`
   width: 100%;
-  
+  height: 436px;
 `
 
 const Price = styled.div`
