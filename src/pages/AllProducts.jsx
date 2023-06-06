@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { paginationServices } from '../api/pagination'
 import { mobile } from '../responsive';
 import { useSelector } from 'react-redux';
-import { Box, Checkbox, CircularProgress, FormControl, FormLabel, FormGroup, FormControlLabel, Typography } from '@material-ui/core';
+import { Box, Checkbox, CircularProgress, FormControl, FormLabel, FormControlLabel, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import WishListIcon from '../components/common/WishListIcon';
@@ -20,6 +20,7 @@ const useStyles = makeStyles({
   container: {
     display: 'flex',
     marginTop: '70px',
+    justifyContent: 'center',
     '@media (max-width: 1050px)' : {
       marginTop: '117px',
     },
@@ -31,7 +32,7 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    margin: '0 12px',
+    margin: '0 24px',
   },
   formControl: {
     margin: '12px 0'
