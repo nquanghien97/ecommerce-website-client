@@ -51,7 +51,7 @@ function AllProducts() {
   useEffect(() => {
     let isMounted = true;
     setLoading(true)
-    const fetchProducts = async () => await paginationServices(page)
+    const fetchProducts = async () => await paginationServices(page, 8)
       .then(res => {
         if(isMounted) 
         setData(res.data);

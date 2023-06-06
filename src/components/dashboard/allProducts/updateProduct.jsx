@@ -36,6 +36,8 @@ function UpdateProduct() {
   const [newData, setNewData] = useState({
     name: '',
     description: '',
+    detail: '',
+    field: '',
     gender: '',
     status: '',
     price: '',
@@ -93,6 +95,8 @@ function UpdateProduct() {
       .required('Trường này là bắt buộc'),
     description: Yup.string()
       .required('Trường này là bắt buộc'),
+    detail: Yup.string()
+      .required('Trường này là bắt buộc'),
     gender: Yup.string()
       .required('Trường này là bắt buộc'),
     status: Yup.string()
@@ -106,6 +110,7 @@ function UpdateProduct() {
   const initialValues = {
     name: '',
     description: '',
+    detail: '',
     gender: '',
     status: '',
     price: '',
@@ -163,6 +168,19 @@ function UpdateProduct() {
                     name="description"
                     onChange={e => {handleChange(e)}}
                     required
+                  />
+                  <Field
+                    className={classes.field}
+                    fullWidth
+                    as={TextField}
+                    variant="outlined"
+                    value={newData.detail}
+                    label="Detail"
+                    name="detail"
+                    onChange={e => {handleChange(e)}}
+                    required
+                    multiline
+                    rows={5}
                   />
                    <div style={{display: "flex", flexDirection: "column", margin: '8px 0'}}>
                     <select style={{padding: '8px 0', borderRadius: '5px', margin: "4px 0", fontSize: "16px"}} name="gender" onChange={e => {handleChange(e)}} value={newData.gender}>
