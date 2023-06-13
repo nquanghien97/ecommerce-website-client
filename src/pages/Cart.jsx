@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Button } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import { mobile } from '../responsive';
 import { useSelector } from 'react-redux';
@@ -10,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { DeleteCart } from '../redux/Products/actions';
 import { Box, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles({
   loading: {
@@ -29,6 +31,7 @@ function Cart() {
 
   const classes = useStyles();
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const userId = useSelector(state => state.user?.user?.user._id) || '';
@@ -202,7 +205,15 @@ function Cart() {
             <PriceTotal>{Number(listCart?.subTotal).toLocaleString('en-US') || 0}đ</PriceTotal>
           </Total>
         </OrderContainer>
-        <Pay>Thanh toán</Pay>
+        <Button
+          onClick={() => navigate('/checkout')}
+          variant="contained"
+          fullWidth
+          color="primary"
+          style={{padding: '12px 24px'}} 
+        >
+          Thanh toán
+        </Button>
       </Right>
     </Container>
     </>
@@ -311,18 +322,6 @@ const TotalItem = styled.p`
 const Right = styled.div`
   flex: 30%;
   padding: 12px;
-`
-
-const Pay = styled.button`
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid;
-  cursor: pointer;
-  &:hover {
-    background-color: black;
-    color: white;
-  }
 `
 
 const OrderContainer = styled.div`

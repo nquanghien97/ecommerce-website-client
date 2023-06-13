@@ -141,7 +141,8 @@ function Product() {
               onClick={()=> addCart(_id, price, userId)}
               variant="contained"
               fullWidth
-              style={{backgroundColor: '#3f51b5', color: 'white', padding: '12px 24px'}} 
+              color="primary"
+              style={{padding: '12px 24px'}} 
             >
               Thêm vào giỏ hàng
             </Button>

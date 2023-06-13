@@ -11,10 +11,11 @@ import WishList from '../pages/wishList';
 import AllProducts from '../pages/AllProducts';
 import FilterProducts from '../pages/FilterProducts';
 import SearchResult from '../pages/SearchResult';
+import Checkout from '../pages/Checkout';
+import Profile from '../pages/Profile';
 import NotFound from '../pages/NotFound';
 import { UpdateCart } from '../redux/Products/actions';
 import { getWishList } from '../redux/Products/actions';
-import Profile from '../pages/Profile';
 
 function Client() {
 
@@ -46,7 +47,8 @@ function Client() {
         <Route path='/children' element={<FilterProducts />} />
         <Route path='/sport' element={<FilterProducts />} />
         <Route path='/search' element={<SearchResult />}/>
-        <Route path='profile' element={<Profile />} />
+        <Route path='/checkout' element={<Checkout />} />
+        <Route path='/profile' element={<Profile />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>
