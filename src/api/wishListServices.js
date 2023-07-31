@@ -1,10 +1,10 @@
-import axios from 'axios';
 import { API_URL } from '../constant';
+import configApi from '../config/configApi';
 
-export function addWishListServices(userId, productId) {
-    return axios.post(`${API_URL}/wishlist`, {userId, productId});
+export function addWishListServices(productId) {
+    return configApi.post(`${API_URL}/wishlist`, {productId});
 }
 
-export function getWishListServices(userId) {
-    return axios.post(`${API_URL}/getwishlist`, {userId});
+export function getWishListServices() {
+    return configApi.post(`${API_URL}/getwishlist`);
 }

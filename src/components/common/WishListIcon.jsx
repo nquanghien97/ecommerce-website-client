@@ -11,7 +11,6 @@ function WishListIcon(props) {
 
   const dispatch = useDispatch();
 
-  const userId = useSelector(state => state.user?.user?.user._id) || '';
   const isLogin = useSelector(state => state.user.isLoggedIn);
 
   const [like, setLike] = useState(liked)
@@ -24,7 +23,7 @@ function WishListIcon(props) {
     if(!isLogin) {
       dispatch(openSnackBar(true))
     } else {
-      dispatch(AddWishList(userId, item._id, item));
+      dispatch(AddWishList(item._id, item));
       setLike(!like)
     }
   }

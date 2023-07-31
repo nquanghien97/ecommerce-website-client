@@ -20,17 +20,14 @@ import { getWishList } from '../redux/Products/actions';
 function Client() {
 
   const currentUser = useSelector((state) => state.user.user)
-  const userId = useSelector(state => state.user.user?.user?._id) || '';
   const dispatch = useDispatch();
 
   const resetNumberCart = 0
 
   useEffect(() => {
-    if(userId) {
-      dispatch(UpdateCart(resetNumberCart));
-      dispatch(getWishList(userId))
-    }
-  },[dispatch, userId])
+    dispatch(UpdateCart(resetNumberCart));
+    dispatch(getWishList())
+  },[dispatch])
 
   return (
     <>

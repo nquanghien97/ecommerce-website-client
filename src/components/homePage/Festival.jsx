@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components'
+import styled from 'styled-components';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
-import {mobile} from '../../responsive'
-
+import {mobile} from '../../responsive';
 
 function Festival() {
 
@@ -10,7 +9,7 @@ function Festival() {
 
   const goToProducts = () => {
     navigate('/allproducts')
-  }
+  };
 
   return (
     <Container>

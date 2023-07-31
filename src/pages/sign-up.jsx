@@ -6,7 +6,6 @@ import { CircularProgress, Container, Grid, Typography, Box, TextField, Button }
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { makeStyles } from '@material-ui/core/styles';
-import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles({
   container: {
@@ -51,7 +50,6 @@ function SignUp() {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const loading = useSelector((state) => state.user.isLoading)
   const errorMessage = useSelector(state => state.user.message_register)

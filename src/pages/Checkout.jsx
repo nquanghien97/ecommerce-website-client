@@ -3,7 +3,6 @@ import { Container, Box, Typography, Grid, TextField, Button, CircularProgress, 
 import { makeStyles } from '@material-ui/core/styles';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { useSelector } from 'react-redux';
 import { getCartServices } from '../api/cartServices';
 import { useNavigate } from 'react-router-dom';
 
@@ -70,14 +69,13 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const [listCart, setListCart] = useState([]);
   const [successCheckout, setSuccessCheckout] = useState(false);
-  const userId = useSelector(state => state.user?.user?.user._id) || '';
 
   useEffect(() => {
     //getCart
     const getCart = async () => {
       setLoading(true)
       try{
-        const res = await getCartServices(userId)
+        const res = await getCartServices()
         setListCart(res.data?.data)
         setLoading(false)
       }catch(err) {
@@ -85,7 +83,7 @@ export default function Checkout() {
       }
     }
     getCart();
-  }, [userId]);
+  }, []);
 
   const onSubmit = (values) => {
     setSuccessCheckout(true)

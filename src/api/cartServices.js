@@ -1,18 +1,18 @@
-import axios from 'axios';
 import { API_URL } from '../constant';
+import configApi from '../config/configApi';
 
-export function addCartServices(productId, price, userId) {
-    return axios.post(`${API_URL}/cart`, {productId, price, userId});
+export function addCartServices(productId, price) {
+    return configApi.post(`${API_URL}/cart`, {productId, price});
 }
 
-export function getCartServices(userId) {
-    return axios.post(`${API_URL}/getcart`, {userId});
+export function getCartServices() {
+    return configApi.get(`${API_URL}/getcart`);
 }
 
 export function updateCartServices(newCart) {
-    return axios.post(`${API_URL}/cart/updatecart`, newCart)
+    return configApi.post(`${API_URL}/cart/updatecart`, newCart)
 }
 
-export function deleteCartServices(userId, productId) {
-    return axios.post(`${API_URL}/cart/deletecart`, {userId, productId})
+export function deleteCartServices(productId) {
+    return configApi.post(`${API_URL}/cart/deletecart`, { productId })
 }

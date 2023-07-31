@@ -86,11 +86,11 @@ function Product() {
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const addCart = (_id, price, userId) => {
+  const addCart = (_id, price) => {
     if(!isLogin) {
       dispatch(openSnackBar(true))
     } else {
-      dispatch(AddCart(_id, price, userId))
+      dispatch(AddCart(_id, price))
     }
   }
 
@@ -108,7 +108,6 @@ function Product() {
     fetchProduct()
   },[id])
 
-  const userId = useSelector(state => state.user.user?.user._id);
   const WishList = useSelector((state) => state._todoProduct.WishList)
 
   if(loading) {
@@ -138,7 +137,7 @@ function Product() {
           </Box>
           <Box className={classes.btnGroup}>
             <Button
-              onClick={()=> addCart(_id, price, userId)}
+              onClick={()=> addCart(_id, price)}
               variant="contained"
               fullWidth
               color="primary"

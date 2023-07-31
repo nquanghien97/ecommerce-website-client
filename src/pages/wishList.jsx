@@ -29,18 +29,16 @@ function WishList() {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
 
-  const userId = useSelector(state => state.user.user?.user._id) || '';
-  console.log(userId)
-  const addCart = (productId, price) => dispatch(AddCart(productId, price, userId))
+  const addCart = (productId, price) => dispatch(AddCart(productId, price))
   
   const numberWishList = useSelector((state) => state._todoProduct.numberWishList)
   
   useEffect(() => {
-    dispatch(getWishList(userId))
+    dispatch(getWishList())
     setLoading(true)
     try {
       const fetchWishList = async () => {
-        const res = await getWishListServices(userId)
+        const res = await getWishListServices()
         setData(res.data.data.wishLists)
         setLoading(false)
       }
@@ -48,12 +46,12 @@ function WishList() {
     } catch(err) {
       console.log(err)
     }
-  },[dispatch, userId])
+  },[dispatch])
 
   const addWishList = (productId, item) => {
     const wishListRemaning = data.filter(item => item.productId._id !== productId)
     setData(wishListRemaning)
-    dispatch(AddWishList(userId, productId, item))
+    dispatch(AddWishList(productId, item))
   }
 
   if(loading) {

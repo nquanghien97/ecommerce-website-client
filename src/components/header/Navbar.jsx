@@ -44,14 +44,12 @@ function Navbar() {
   useEffect(() => {
     suggestionsServices(textSearch)
       .then((data) => textSearch && setDataSearch(data.data.data))
-    if(userId) {
-      const fetchCart = async () => {
-          const res = await getCartServices(userId)
-          setListCart(res.data?.data?.products)
-        }
-      fetchCart()
-    }
-  },[textSearch, userId])
+    const fetchCart = async () => {
+        const res = await getCartServices()
+        setListCart(res.data?.data?.products)
+      }
+    fetchCart()
+  },[textSearch])
 
   const onShowProfile = (e) => {
     setShowProfile(!showProfile)

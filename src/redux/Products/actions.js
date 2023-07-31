@@ -104,11 +104,11 @@ export function GetNumberCart(){
   }
 }
  
-export const AddCart = (productId, price, userId) => {
+export const AddCart = (productId, price) => {
   return async (dispatch) => {
     // dispatch(loading())
     try {
-      const res = await addCartServices(productId, price, userId)
+      const res = await addCartServices(productId, price)
       dispatch({
         type: ADD_CART,
         payload: res.data.products
@@ -133,11 +133,11 @@ export function DeleteCart(payload){
 }
 
 //*ADD_WISH_LIST
-export const AddWishList = (userId, productId, item) => {
+export const AddWishList = (productId, item) => {
   return async (dispatch) => {
     // dispatch(loading())
     try {
-      const res = await addWishListServices(userId, productId)
+      const res = await addWishListServices(productId)
       dispatch({
         type: ADD_WISH_LIST,
         payload: {
@@ -153,10 +153,10 @@ export const AddWishList = (userId, productId, item) => {
 }
 
 //* GET_WISH_LIST
-export const getWishList = (userId) => {
+export const getWishList = () => {
   return async (dispatch) => {
     try {
-      const res = await getWishListServices(userId)
+      const res = await getWishListServices()
       dispatch({
         type: GET_WISH_LIST,
         payload: res.data,

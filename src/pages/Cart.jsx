@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import { mobile } from '../responsive';
-import { useSelector } from 'react-redux';
 import { TextField } from '@material-ui/core';
 import { getCartServices, updateCartServices, deleteCartServices } from '../api/cartServices';
 import CartHeader from '../components/header/CartHeader';
@@ -34,8 +33,6 @@ function Cart() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const userId = useSelector(state => state.user?.user?.user._id) || '';
-
   const [listCart, setListCart] = useState([])
   const [newCart, setNewCart] = useState([]);
   const [listCartRemaining, setListCartRemaining] = useState();
@@ -56,9 +53,9 @@ function Cart() {
   useEffect(() => {
     //getCart
     const getCart = async () => {
-      setLoading(true)
+      // setLoading(true)
       try{
-        const res = await getCartServices(userId)
+        const res = await getCartServices()
         setListCart(res.data?.data)
         setLoading(false)
       }catch(err) {
@@ -80,7 +77,6 @@ function Cart() {
       quantity: result[key]
     })); 
     const dataUpdate = {
-      userId,
       products
     }
     const updateCart = async () => {
@@ -91,7 +87,7 @@ function Cart() {
       }
     }
     updateCart()
-  },[newCart, userId]);
+  },[newCart]);
 
   const result = newCart.reduce((acc, cur) => {
     const productId = cur.productId;
@@ -110,7 +106,7 @@ function Cart() {
   const deleteCart = async (data) => {
     try {
       dispatch(DeleteCart(data))
-      await deleteCartServices(userId, data.productId._id)
+      await deleteCartServices(data.productId._id)
       const newData = listCart.products?.filter((item) => {
         return item.productId._id !== data.productId._id
       })

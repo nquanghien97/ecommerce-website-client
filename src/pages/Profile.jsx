@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useLayoutEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Box, Typography, Avatar, TextField, Button, CircularProgress } from '@material-ui/core';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import { getUser, updateUser } from '../api/userServices';
 import { updateUser as updateUserStore } from '../redux/User/user.actions'
@@ -51,19 +51,18 @@ function Profile() {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const userId = useSelector(state => state.user.user?.user._id)
   const [file, setFile] = useState();
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
 
   const fetchUser = useCallback(async () => {
     try{
-        const data = await getUser(userId)
+        const data = await getUser()
         setUser(data.data.user)
       }
      catch(err){
       console.log(err)
-    }}, [userId])
+    }}, [])
 
     useEffect(() => {
       fetchUser()
@@ -82,7 +81,6 @@ function Profile() {
     const formData = new FormData();
     formData.append('image', file)
     formData.append('fullName', user.fullName)
-    formData.append('userId', userId)
     try {
       const res = await updateUser(formData)
       dispatch(updateUserStore(res.data))
