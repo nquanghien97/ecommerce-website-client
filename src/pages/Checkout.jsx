@@ -87,6 +87,7 @@ export default function Checkout() {
 
   const onSubmit = (values) => {
     setSuccessCheckout(true)
+    console.log(values)
     setTimeout(() => {
       navigate('/')
     }, 2000)

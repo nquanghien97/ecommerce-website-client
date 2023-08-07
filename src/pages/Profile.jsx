@@ -73,14 +73,18 @@ function Profile() {
   }
 
   const handleChangeInput = (e) => {
-    setUser({...user, fullName: e.target.value})
+    setUser({...user,
+      [e.target.name]: e.target.value
+    })
   }
+  console.log(user)
 
   const onUpdateProfile = async () => {
     setLoading(true)
     const formData = new FormData();
     formData.append('image', file)
     formData.append('fullName', user.fullName)
+    formData.append('address', user.address)
     try {
       const res = await updateUser(formData)
       dispatch(updateUserStore(res.data))
@@ -117,12 +121,22 @@ function Profile() {
                 variant="outlined"
                 onChange={handleChangeInput}
                 value={user?.fullName || ''}
+                name="fullName"
+              />
+            </Box>
+            <Box className={classes.info}>
+              <Typography className={classes.title} variant="h5" >Address</Typography>
+              <TextField
+                variant="outlined"
+                onChange={handleChangeInput}
+                value={user?.address || ''}
+                name="address"
               />
             </Box>
           </Box>
         </Box>
-        <Box style={{width: '100%', marginTop: '20px'}} onClick={onUpdateProfile}>
-          <Button variant="contained" color="primary">
+        <Box style={{width: '100%', marginTop: '20px'}}>
+          <Button variant="contained" color="primary" onClick={onUpdateProfile}>
             Update Profile
             {loading? <CircularProgress style={{marginLeft: '8px'}} size="20px" color="inherit" /> : null}
           </Button>
